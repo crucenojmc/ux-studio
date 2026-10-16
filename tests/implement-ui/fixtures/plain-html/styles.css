@@ -1,0 +1,7 @@
+:root {
+  --surface-page: #f7f5f0;
+}
+
+body {
+  background: var(--surface-page);
+}

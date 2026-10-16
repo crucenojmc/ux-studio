@@ -1,0 +1,225 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-04",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Diseño",
+      "question": "¿Cómo resolvemos el sistema de diseño?",
+      "why": "El prototipo necesita tokens; sin esta decisión no se sabe si se reutiliza, se extrae o se omite el módulo. Los caminos se combinan; «Saltear» va sola.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "reutilizar",
+          "label": "Reutilizar el existente (Recomendado)",
+          "description": "Se usa el sistema de diseño que ya existe para esta marca.",
+          "consequence": "Es lo más rápido y evita duplicar un sistema."
+        },
+        {
+          "id": "codigo",
+          "label": "Desde el código",
+          "description": "Se extraen los tokens y componentes reales del repositorio.",
+          "consequence": "Refleja lo que ya está construido; requiere leer el código."
+        },
+        {
+          "id": "web",
+          "label": "Auditar una web",
+          "description": "Se audita una web pública o capturas aportadas, con autorización.",
+          "consequence": "Nunca se toca una APP de producción con sesión; solo páginas públicas."
+        },
+        {
+          "id": "saltear",
+          "label": "Saltear",
+          "description": "La presentación usa los tokens de la plantilla.",
+          "consequence": "El aspecto es genérico y se avisa una sola vez.",
+          "exclusive": true
+        }
+      ],
+      "unblocks": [
+        "F-04"
+      ],
+      "defaultIfUnanswered": {
+        "option": "saltear",
+        "note": "Se aplica como supuesto y se rotula como tal en el plan de módulos."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-05",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Utilidad",
+      "question": "¿Auditamos la utilidad de los flujos?",
+      "why": "Mide si las tareas frecuentes están a mano y sin datos repetidos; es el módulo que prueba que el producto sirve.",
+      "options": [
+        {
+          "id": "papel",
+          "label": "Sobre el papel (Recomendado)",
+          "description": "Se audita el brief y los requisitos, sin navegador.",
+          "consequence": "Es barato y detecta problemas antes de construir."
+        },
+        {
+          "id": "prototipo",
+          "label": "Sobre el prototipo",
+          "description": "Se audita el showcase navegable.",
+          "consequence": "Requiere que el showcase exista o esté planificado."
+        },
+        {
+          "id": "app",
+          "label": "Sobre la app existente",
+          "description": "Se audita la app local o de prueba que el usuario autorice.",
+          "consequence": "Nunca se recorre producción; requiere sesiones de prueba por rol."
+        },
+        {
+          "id": "saltear",
+          "label": "Saltear",
+          "description": "No se audita la utilidad.",
+          "consequence": "Queda registrado como decisión, no como omisión."
+        }
+      ],
+      "unblocks": [
+        "F-05"
+      ],
+      "defaultIfUnanswered": {
+        "option": "papel",
+        "note": "Se aplica como supuesto y se rotula como tal en el plan de módulos."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-06",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Entregables",
+      "question": "¿Qué entregables necesitamos?",
+      "why": "Define qué se construye y quién lo hace; el video solo se propone si una audiencia claramente se beneficia.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "showcase",
+          "label": "Presentación del prototipo (Recomendado)",
+          "description": "La app simulada y navegable; el formato y sus secciones se eligen en la ronda siguiente.",
+          "consequence": "Es la base de diapositivas y de cualquier video."
+        },
+        {
+          "id": "slides",
+          "label": "Diapositivas",
+          "description": "Un deck con la herramienta de diapositivas.",
+          "consequence": "Se alimenta de los flujos del showcase."
+        },
+        {
+          "id": "lienzo",
+          "label": "Lienzo de diseño",
+          "description": "Un lienzo de diseño para explorar pantallas.",
+          "consequence": "Sirve para variantes antes de fijar el showcase."
+        },
+        {
+          "id": "video",
+          "label": "Video (opcional)",
+          "description": "Videos narrados y subtitulados por audiencia.",
+          "consequence": "Requiere el showcase, más aprobaciones y descargas pesadas."
+        }
+      ],
+      "unblocks": [
+        "F-06"
+      ],
+      "defaultIfUnanswered": {
+        "option": "showcase",
+        "note": "Se aplica como supuesto y se rotula como tal en el plan de módulos."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-07",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Fidelidad",
+      "question": "¿Cuándo medimos la fidelidad de la implementación?",
+      "why": "Compara el producto real con el prototipo con números; solo es posible si ya hay implementación.",
+      "options": [
+        {
+          "id": "despues",
+          "label": "Más adelante (Recomendado)",
+          "description": "Se mide cuando exista la implementación; queda planificado sin ejecutarlo.",
+          "consequence": "No hace nada ahora; se retoma con la implementación."
+        },
+        {
+          "id": "ahora",
+          "label": "Ahora",
+          "description": "La implementación ya existe y se mide contra el prototipo.",
+          "consequence": "Requiere el prototipo, la URL y un método de acceso."
+        },
+        {
+          "id": "no-aplica",
+          "label": "No aplica",
+          "description": "No habrá implementación que comparar.",
+          "consequence": "El módulo queda fuera del plan."
+        }
+      ],
+      "unblocks": [
+        "F-07"
+      ],
+      "defaultIfUnanswered": {
+        "option": "despues",
+        "note": "Se aplica como supuesto y se rotula como tal en el plan de módulos."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

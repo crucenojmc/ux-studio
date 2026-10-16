@@ -1,0 +1,21 @@
+/* Fictional design-system tokens for the graphic-assets tests. */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --surface-page: #fbfaf7;
+  --surface-raised: #ffffff;
+  --text-primary: #1d2330;
+  --text-secondary: #4a5263;
+  --border-subtle: #e2ded6;
+  --accent: #2f5bd3;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --fixture-marker: 1;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-page: #14171d;
+  --surface-raised: #1c2028;
+  --text-primary: #eef0f4;
+  --text-secondary: #b4bac6;
+  --border-subtle: #2c313b;
+  --accent: #8aa8ff;
+}

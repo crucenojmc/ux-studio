@@ -1,0 +1,118 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-08",
+      "topic": "scope",
+      "priority": "high",
+      "round": 4,
+      "header": "Formato",
+      "question": "¿Con qué formato presentamos el prototipo?",
+      "why": "El formato sale de las audiencias: no todas necesitan el sistema UX completo. La presentación muestra solo lo que se elija.",
+      "options": [
+        {
+          "id": "tour",
+          "label": "App con recorridos guiados (Recomendado)",
+          "description": "La app simulada con su índice de pantallas y los recorridos reproducibles paso a paso.",
+          "consequence": "Cada audiencia ve su tarea de punta a punta; las secciones se suman solo si se eligen."
+        },
+        {
+          "id": "app",
+          "label": "Solo la app simulada",
+          "description": "La app a pantalla completa, sin portada ni secciones.",
+          "consequence": "Sirve para navegar en vivo o probar con usuarios; no explica los recorridos."
+        },
+        {
+          "id": "ux-system",
+          "label": "Sistema UX completo",
+          "description": "Portada con controles, las maquetas navegables, los recorridos UX reproducibles, las secciones elegidas y un anexo de método.",
+          "consequence": "Es la más extensa; conviene para revisiones de UX o de diseño."
+        }
+      ],
+      "unblocks": [
+        "F-08"
+      ],
+      "defaultIfUnanswered": {
+        "option": "tour",
+        "note": "Se aplica la recomendación derivada de las audiencias y se rotula como supuesto en el brief."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Formato de la presentación"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-09",
+      "topic": "scope",
+      "priority": "high",
+      "round": 4,
+      "header": "Secciones",
+      "question": "¿Qué secciones acompañan a la app?",
+      "why": "Solo se muestran las secciones elegidas, en ese orden. «Solo la app simulada» no lleva secciones.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "definiciones",
+          "label": "Definiciones y decisiones (Recomendado)",
+          "description": "Los términos del negocio y las decisiones, abiertas o tomadas, con su fecha.",
+          "consequence": "Quien decide ve qué falta definir y qué ya se resolvió."
+        },
+        {
+          "id": "inventario",
+          "label": "Inventario (Recomendado)",
+          "description": "Tabla de pantallas: quién las ve, para qué sirven y qué cambia según el rol.",
+          "consequence": "Desarrollo tiene el alcance de pantallas para el traspaso."
+        },
+        {
+          "id": "principios",
+          "label": "Principios",
+          "description": "Las reglas del diseño, cada una con su motivo.",
+          "consequence": "Sirve a quien aprueba el criterio, no solo el resultado."
+        },
+        {
+          "id": "sistema",
+          "label": "Sistema",
+          "description": "Colores, tipografía, movimiento y espacio leídos en vivo de los tokens.",
+          "consequence": "Útil en revisiones de diseño; el prototipo usa los tokens igual aunque esta sección no se muestre."
+        }
+      ],
+      "unblocks": [
+        "F-09"
+      ],
+      "defaultIfUnanswered": {
+        "option": [
+          "definiciones",
+          "inventario"
+        ],
+        "note": "Se aplica la recomendación derivada de las audiencias y se rotula como supuesto en el brief."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Formato de la presentación"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

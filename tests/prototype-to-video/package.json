@@ -1,0 +1,15 @@
+{
+  "name": "ux-studio-prototype-to-video-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the ux-studio prototype-to-video skill scripts (capture-flows.mjs, srt-from-script.mjs).",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.62.1"
+  }
+}

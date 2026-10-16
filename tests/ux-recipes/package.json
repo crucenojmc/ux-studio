@@ -1,0 +1,8 @@
+{
+  "name": "ux-studio-ux-recipes-tests",
+  "private": true,
+  "type": "module",
+  "description": "Structural tests for the ux-studio ux-recipes skill, its recipes and index, and their integration in the brief, the envelope, the agents and the READMEs.",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test --test-concurrency=1" }
+}

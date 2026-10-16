@@ -1,0 +1,111 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-17",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Medición",
+      "question": "¿Qué medimos?",
+      "why": "Define qué skills corren y qué informes se entregan.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "utilidad",
+          "label": "Utilidad de los flujos (Recomendado)",
+          "description": "Tareas frecuentes a mano, datos repetidos, costo de los flujos, alcance por rol y uso del espacio.",
+          "consequence": "Informe con hallazgos priorizados y un cuestionario de decisiones."
+        },
+        {
+          "id": "accesibilidad",
+          "label": "Accesibilidad",
+          "description": "Barreras de accesibilidad de las pantallas y los flujos, según las pautas WCAG.",
+          "consequence": "Hallazgos con evidencia y correcciones propuestas; lo que solo un dispositivo real valida queda pendiente."
+        },
+        {
+          "id": "fidelidad",
+          "label": "Fidelidad de la implementación",
+          "description": "Cuánto se parece lo implementado al prototipo, medido con números.",
+          "consequence": "Necesita la app implementada y el prototipo; sin alguno de los dos queda para más adelante."
+        }
+      ],
+      "unblocks": [
+        "F-17"
+      ],
+      "defaultIfUnanswered": {
+        "option": [
+          "utilidad"
+        ],
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-18",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Objeto",
+      "question": "¿Sobre qué medimos?",
+      "why": "Cada objeto pide insumos distintos: el papel, solo el brief; el prototipo, su URL; la app, un entorno autorizado y una sesión por rol.",
+      "options": [
+        {
+          "id": "app",
+          "label": "La app existente (Recomendado)",
+          "description": "La app implementada, en un entorno local o de prueba autorizado.",
+          "consequence": "Necesita la URL y una sesión guardada por rol; nunca producción."
+        },
+        {
+          "id": "prototipo",
+          "label": "El prototipo",
+          "description": "El prototipo publicado del showcase.",
+          "consequence": "Detecta problemas antes de implementar; la fidelidad no aplica sin la app."
+        },
+        {
+          "id": "papel",
+          "label": "El papel",
+          "description": "El brief y los requisitos, sin navegador.",
+          "consequence": "Es barato y temprano; la accesibilidad y la fidelidad necesitan pantallas."
+        }
+      ],
+      "unblocks": [
+        "F-18"
+      ],
+      "defaultIfUnanswered": {
+        "option": "app",
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

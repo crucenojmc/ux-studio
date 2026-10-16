@@ -1,0 +1,14 @@
+{
+  "name": "implementation-fidelity-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for plugins/ux-studio/skills/implementation-fidelity/assets (CIEDE2000, capture and compare).",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "pixelmatch": "^8.0.0",
+    "playwright-core": "^1.56.0",
+    "pngjs": "^7.0.0"
+  }
+}

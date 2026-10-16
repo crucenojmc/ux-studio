@@ -1,0 +1,9 @@
+{
+  "name": "ux-studio-presentation-brief-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the ux-studio presentation-brief module plan assets.",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test --test-concurrency=1" },
+  "devDependencies": { "ajv": "8.20.0", "ajv-formats": "3.0.1" }
+}

@@ -1,0 +1,121 @@
+{
+  "version": "1",
+  "project": "Mantenimiento de flota (demo)",
+  "language": "es",
+  "stage": "prototype",
+  "generatedAt": "2026-10-15T12:00:00Z",
+  "sources": ["BRIEF.md", "prototype/index.html", "tmp/ux-audit/flow-cost.md", "tmp/ux-audit/nav-graph.md", "tmp/ux-audit/space-audit.md"],
+  "questions": [
+    {
+      "id": "Q-01",
+      "topic": "frequency",
+      "priority": "high",
+      "round": 1,
+      "header": "Frecuencia",
+      "question": "¿Cuántas órdenes de trabajo cierra un técnico en un turno típico?",
+      "why": "Define si «Cerrar orden» va a un clic desde el inicio. Hoy cuesta 41 s por orden y no sabemos cuántas veces por día se repite.",
+      "options": [
+        { "id": "mas-de-10", "label": "Más de 10 por turno (Recomendado)", "description": "Lo que sugieren las dos entrevistas con técnicos.", "consequence": "«Cerrar orden» pasa a ser la acción principal del inicio del técnico." },
+        { "id": "entre-3-y-10", "label": "Entre 3 y 10 por turno", "description": "Uso frecuente pero no continuo.", "consequence": "Acceso directo en el inicio, sin ser la acción principal." },
+        { "id": "menos-de-3", "label": "Menos de 3 por turno", "description": "Tarea ocasional.", "consequence": "Se mantiene dentro de la lista de órdenes." }
+      ],
+      "unblocks": ["F-01", "F-04"],
+      "defaultIfUnanswered": { "option": "mas-de-10", "note": "Se diseña para el caso de mayor uso y se marca como supuesto en el informe." },
+      "updates": [{ "target": "task-inventory", "section": "Técnico" }, { "target": "BRIEF.md", "section": "Pendientes" }],
+      "rerun": ["task-inventory", "flow-cost"],
+      "answer": { "status": "pending", "option": null, "text": null }
+    },
+    {
+      "id": "Q-02",
+      "topic": "redundancy",
+      "priority": "high",
+      "round": 1,
+      "header": "Patente",
+      "question": "¿El técnico debe volver a escribir la patente del vehículo al cerrar la orden, o la tomamos de la orden abierta?",
+      "why": "La patente se escribe dos veces en el mismo proceso: 7 caracteres y 4 s extra por orden.",
+      "options": [
+        { "id": "precargar", "label": "Precargar el dato (Recomendado)", "description": "Se muestra la patente de la orden; el técnico puede corregirla.", "consequence": "Ahorra el tipeo y evita errores de transcripción." },
+        { "id": "reingresar", "label": "Pedirla otra vez", "description": "Se mantiene el reingreso como control.", "consequence": "Sigue el costo; solo se justifica si es un control exigido." }
+      ],
+      "unblocks": ["F-02"],
+      "defaultIfUnanswered": { "option": "precargar", "note": "Se aplica en el prototipo con la etiqueta «supuesto»." },
+      "updates": [{ "target": "design-decisions" }, { "target": "prototype", "section": "Cerrar orden" }],
+      "rerun": ["flow-cost"],
+      "answer": { "status": "answered", "option": "precargar", "text": null, "by": "Responsable de producto (demo)", "at": "2026-10-15T14:05:00Z" }
+    },
+    {
+      "id": "Q-03",
+      "topic": "reachability",
+      "priority": "medium",
+      "round": 1,
+      "header": "Repuestos",
+      "question": "¿El supervisor necesita consultar el stock de repuestos desde su inicio?",
+      "why": "La pantalla de repuestos existe pero ningún menú la enlaza para el supervisor: hoy solo se llega escribiendo la dirección.",
+      "options": [
+        { "id": "en-menu", "label": "Agregarla al menú (Recomendado)", "description": "Entrada en el menú lateral del supervisor.", "consequence": "Queda a una interacción del inicio." },
+        { "id": "desde-orden", "label": "Solo desde la orden", "description": "Enlace contextual dentro de cada orden.", "consequence": "A dos interacciones; no se ve el stock general." },
+        { "id": "no-la-usa", "label": "No la necesita", "description": "La pantalla es solo para depósito.", "consequence": "Se quita el permiso al supervisor." }
+      ],
+      "unblocks": ["F-03"],
+      "defaultIfUnanswered": { "option": "en-menu", "note": "Se agrega al menú en el prototipo y queda como supuesto." },
+      "updates": [{ "target": "prototype", "section": "Navegación del supervisor" }],
+      "rerun": ["nav-graph"],
+      "answer": { "status": "pending", "option": null, "text": null }
+    },
+    {
+      "id": "Q-04",
+      "topic": "space",
+      "priority": "medium",
+      "round": 1,
+      "header": "Tabla",
+      "question": "¿Qué columnas necesita ver el supervisor sin desplazarse en la lista de órdenes?",
+      "why": "En 1440×900 la tabla usa 9 columnas y la acción «Asignar» queda fuera de la primera pantalla.",
+      "options": [
+        { "id": "cinco-clave", "label": "Cinco columnas clave (Recomendado)", "description": "Orden, vehículo, estado, técnico y vencimiento; el resto en el detalle.", "consequence": "La acción «Asignar» queda visible sin desplazamiento." },
+        { "id": "todas", "label": "Todas las columnas", "description": "Se mantienen las 9 columnas.", "consequence": "Requiere desplazamiento horizontal en pantallas chicas." },
+        { "id": "configurable", "label": "Que cada uno elija", "description": "Selector de columnas por usuario.", "consequence": "Más esfuerzo de desarrollo; la vista inicial igual debe definirse." }
+      ],
+      "unblocks": ["F-05"],
+      "defaultIfUnanswered": { "option": "cinco-clave", "note": "Se aplicó por falta de respuesta en la ronda 1; revisar en la demo." },
+      "updates": [{ "target": "design-decisions" }],
+      "rerun": ["space-audit"],
+      "answer": { "status": "defaulted", "option": "cinco-clave", "text": null, "by": null, "at": "2026-10-15T16:00:00Z" }
+    },
+    {
+      "id": "Q-05",
+      "topic": "data-meaning",
+      "priority": "high",
+      "round": 2,
+      "header": "Estado",
+      "question": "¿Qué significa que una orden esté en estado «En espera»?",
+      "why": "El estado decide si la orden aparece en el inicio del técnico. No inventamos su significado: lo confirma el negocio.",
+      "options": [
+        { "id": "faltan-repuestos", "label": "Faltan repuestos (Recomendado)", "description": "Hipótesis con más evidencia: 8 de cada 10 órdenes en ese estado tienen un pedido de repuestos abierto (datos de demostración).", "consequence": "Se oculta del inicio del técnico y se muestra al depósito." },
+        { "id": "falta-aprobacion", "label": "Falta aprobación", "description": "Espera la autorización del supervisor.", "consequence": "Se muestra en el inicio del supervisor como pendiente." },
+        { "id": "pausada", "label": "Pausada por el técnico", "description": "El técnico la dejó para retomarla.", "consequence": "Sigue visible en el inicio del técnico." }
+      ],
+      "unblocks": ["F-06"],
+      "updates": [{ "target": "BRIEF.md", "section": "Glosario" }],
+      "rerun": ["nav-graph", "heuristics"],
+      "answer": { "status": "pending", "option": null, "text": null }
+    },
+    {
+      "id": "Q-06",
+      "topic": "business-rule",
+      "priority": "high",
+      "round": 2,
+      "header": "Aprobación",
+      "question": "¿Quién puede aprobar un repuesto que supera el monto límite de la orden?",
+      "why": "El código de la app muestra «Aprobar» a cualquier rol con acceso a la orden. La regla decide quién ve el botón y qué valida el servidor.",
+      "options": [
+        { "id": "supervisor", "label": "Solo supervisión (Recomendado)", "description": "Hipótesis con más evidencia: las 12 aprobaciones del último mes las hizo un supervisor (datos de demostración).", "consequence": "Cambia: la API de órdenes valida el rol al aprobar y la web oculta «Aprobar» al técnico; los datos no cambian. Afecta a técnicos y supervisores. Costo: bajo, una validación en un servicio. Riesgo: un repuesto urgente espera si no hay supervisor de turno." },
+        { "id": "supervisor-o-admin", "label": "Supervisión o administración", "description": "Cualquiera de los dos roles aprueba.", "consequence": "Cambia: la API acepta dos roles y la web muestra «Aprobar» a ambos; los datos no cambian. Afecta a supervisión y administración. Costo: bajo. Riesgo: dos personas aprueban el mismo pedido si no se bloquea tras la primera aprobación." },
+        { "id": "limite-por-rol", "label": "Cada rol hasta su límite", "description": "Cada rol aprueba hasta un monto propio.", "consequence": "Cambia: la base guarda un límite por rol, la API lo valida y la web suma su pantalla de configuración. Afecta a todos los roles y a quien administra los límites. Costo: alto, campo nuevo y migración. Riesgo: un límite mal cargado habilita compras sin control." }
+      ],
+      "unblocks": ["F-07"],
+      "updates": [{ "target": "BRIEF.md", "section": "Decisiones" }, { "target": "design-decisions" }],
+      "rerun": ["heuristics"],
+      "answer": { "status": "pending", "option": null, "text": null }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Duplicated screen fixture</title>
+<style>
+  body { margin: 0; font-family: sans-serif; }
+  .frame { padding: 8px; }
+  .frame-web { display: none; }            /* first DOM match is hidden, like the web frame at phone width */
+  .tall { height: 1200px; }
+  .clicked { color: rgb(0, 128, 0); }
+</style>
+</head>
+<body>
+  <div class="frame frame-web">
+    <button class="dup-btn" type="button">Hidden</button>
+    <input class="dup-input" value="hidden">
+    <div class="dup-end">end (hidden)</div>
+  </div>
+  <div class="frame frame-phone">
+    <button class="dup-btn" type="button" onclick="document.querySelector('#out').className='clicked'">Visible</button>
+    <input class="dup-input" value="visible">
+    <div class="tall"></div>
+    <div class="dup-end">end (visible)</div>
+    <div id="out">result</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Web-only showcase fixture</title></head>
+<body>
+  <div id="sc"><h1 data-proto="title">Resumen</h1></div>
+  <script>
+    // Mimics the prototype-showcase contract: LAYOUT.platforms declares only web, so ?capture=phone
+    // replaces the page with the reason and throws before window.SHOWCASE exists.
+    const LAYOUT = { platforms: ['web'] };
+    const capture = new URLSearchParams(location.search).get('capture');
+    if (capture && !LAYOUT.platforms.includes(capture)) {
+      const message = `?capture=${capture} is not available: LAYOUT.platforms declares only ${LAYOUT.platforms.join(' and ')}.`;
+      const note = document.createElement('p');
+      note.className = 'sc-fatal'; note.setAttribute('role', 'alert'); note.textContent = message;
+      document.getElementById('sc').replaceWith(note);
+      throw new Error(message);
+    }
+    window.SHOWCASE = { version: '1', open() {} };
+  </script>
+</body>
+</html>

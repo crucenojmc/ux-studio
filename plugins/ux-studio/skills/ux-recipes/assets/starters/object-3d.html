@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es" data-scene="loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Objeto 3D</title>
+<!--
+  ux-recipes starter: 3D object (recipe `object-3d`).
+  - three.js as ES modules from jsDelivr through an import map, pinned to one exact version for the
+    core and its examples/jsm addons (OrbitControls, GLTFLoader, RoomEnvironment).
+  - Default scene: primitives on a pedestal, coloured with the tokens below (ux-studio core names).
+  - GLB_URL: the URL of a .glb model uploaded to the artifact's asset store (15 MB at most per file).
+    Empty keeps the primitives. Draco or Meshopt compressed models also need DRACOLoader or
+    MeshoptDecoder from the same addons path.
+  - POSTER_URL: optional still image shown when WebGL is unavailable (an asset-store URL).
+  - Studio lighting (room environment and a soft-shadow key light), orbit controls, auto-rotate off
+    under reduced motion, a resize observer, and fallback text when WebGL or the library is missing.
+  - Page state for captures and checks: <html data-scene="loading | ready | fallback">;
+    window.SCENE3D exposes the scene, camera, renderer and controls once ready.
+-->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+  }
+}
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-page: #f5f6f8;
+    --surface-raised: #ffffff;
+    --surface-sunken: #e7e9ee;
+    --text-primary: #14171f;
+    --text-secondary: #4a5161;
+    --border-subtle: #dde1e8;
+    --accent: #2457d6;
+    --focus-ring: #2457d6;
+    --series-2: #d9822b;
+    --series-3: #1f9d8a;
+    --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+    --radius-sm: 6px; --radius-lg: 20px;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-page: #0f1218;
+      --surface-raised: #181c25;
+      --surface-sunken: #222733;
+      --text-primary: #eef0f4;
+      --text-secondary: #a9b0bf;
+      --border-subtle: #2c3240;
+      --accent: #7aa2ff;
+      --focus-ring: #7aa2ff;
+      --series-2: #f0a35e;
+      --series-3: #4cc7b4;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-page: #0f1218;
+    --surface-raised: #181c25;
+    --surface-sunken: #222733;
+    --text-primary: #eef0f4;
+    --text-secondary: #a9b0bf;
+    --border-subtle: #2c3240;
+    --accent: #7aa2ff;
+    --focus-ring: #7aa2ff;
+    --series-2: #f0a35e;
+    --series-3: #4cc7b4;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font: 16px/1.5 var(--font-sans);
+  }
+  main { max-width: 960px; margin: 0 auto; padding: var(--space-5) var(--space-4) var(--space-6); }
+  h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 var(--space-2); }
+  .lead { margin: 0 0 var(--space-5); color: var(--text-secondary); }
+  .stage {
+    position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 70vh;
+    background: var(--surface-sunken); border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  .fallback {
+    position: absolute; inset: 0; display: grid; place-content: center; gap: var(--space-3);
+    padding: var(--space-5); text-align: center; color: var(--text-secondary);
+  }
+  .fallback img { max-width: 100%; max-height: 60%; margin: 0 auto; border-radius: var(--radius-sm); }
+  .fallback p { margin: 0; }
+  :root[data-scene="ready"] .fallback { display: none; }
+  .controls { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+  button {
+    font: inherit; font-size: .9375rem; min-height: 40px; padding: 0 var(--space-4);
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    background: var(--surface-raised); color: var(--text-primary); cursor: pointer;
+  }
+  button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .note { margin: var(--space-3) 0 0; color: var(--text-secondary); font-size: .875rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Objeto 3D</h1>
+  <p class="lead">Arrastra para girar la vista; usa la rueda o pellizca para acercar.</p>
+
+  <div class="stage" id="stage">
+    <div class="fallback" id="fallback">
+      <p><strong>Vista 3D</strong></p>
+      <p id="fallback-reason">Cargando la vista 3D…</p>
+      <noscript><p>Esta vista necesita JavaScript y WebGL.</p></noscript>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button type="button" id="rotate" aria-pressed="false" disabled>Giro automático</button>
+    <button type="button" id="reset" disabled>Restablecer vista</button>
+  </div>
+  <p class="note" id="note" hidden></p>
+</main>
+
+<script type="module">
+  // Optional model in the artifact's asset store (.glb, 15 MB at most). Empty → primitives scene.
+  const GLB_URL = '';
+  // Optional still image for browsers without WebGL.
+  const POSTER_URL = '';
+  // What the canvas shows, for screen readers.
+  const LABEL = 'Composición de una esfera, un cubo y un anillo sobre un pedestal';
+
+  const root = document.documentElement;
+  const stage = document.getElementById('stage');
+  const reason = document.getElementById('fallback-reason');
+  const note = document.getElementById('note');
+  const rotateBtn = document.getElementById('rotate');
+  const resetBtn = document.getElementById('reset');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const dark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function fail(text) {
+    reason.textContent = text;
+    if (POSTER_URL && !document.querySelector('.fallback img')) {
+      const img = document.createElement('img');
+      img.src = POSTER_URL;
+      img.alt = LABEL;
+      reason.before(img);
+    }
+    root.dataset.scene = 'fallback';
+  }
+
+  function hasWebGL() {
+    try {
+      const canvas = document.createElement('canvas');
+      return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  }
+
+  async function start() {
+    if (!hasWebGL()) return fail('Este navegador no puede mostrar gráficos 3D: WebGL no está disponible.');
+    let THREE, OrbitControls, RoomEnvironment;
+    try {
+      THREE = await import('three');
+      ({ OrbitControls } = await import('three/addons/controls/OrbitControls.js'));
+      ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
+    } catch {
+      return fail('No se pudo cargar la librería 3D. Revisa la conexión y vuelve a cargar la página.');
+    }
+
+    // Renderer: transparent, so the stage background (a token) shows through.
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    const canvas = renderer.domElement;
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', LABEL);
+    canvas.addEventListener('webglcontextlost', (event) => {
+      event.preventDefault();
+      fail('Se perdió el contexto gráfico. Vuelve a cargar la página.');
+    });
+    stage.prepend(canvas);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 4 / 3, 0.1, 100);
+    camera.position.set(4.2, 2.8, 5.4);
+
+    // Studio lighting: a neutral room for fill and reflections, one key light for soft shadows.
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    const key = new THREE.DirectionalLight(0xffffff, 2);
+    key.position.set(3, 6, 4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.radius = 4;
+    Object.assign(key.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 1, far: 20 });
+    scene.add(key);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.18 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Token colours, re-read when the colour scheme changes.
+    const themed = [];
+    const tokenColor = (name) => new THREE.Color().setStyle(getComputedStyle(root).getPropertyValue(name).trim());
+    function material(token, options = {}) {
+      const m = new THREE.MeshPhysicalMaterial({ color: tokenColor(token), roughness: 0.35, metalness: 0.05, clearcoat: 0.3, ...options });
+      themed.push([m, token]);
+      return m;
+    }
+    dark.addEventListener('change', () => themed.forEach(([m, token]) => m.color.copy(tokenColor(token))));
+
+    const model = new THREE.Group();
+    scene.add(model);
+    function mesh(geometry, mat, x, y, z) {
+      const m = new THREE.Mesh(geometry, mat);
+      m.position.set(x, y, z);
+      m.castShadow = true;
+      m.receiveShadow = true;
+      model.add(m);
+      return m;
+    }
+    function addPrimitives() {
+      mesh(new THREE.CylinderGeometry(1.7, 1.8, 0.3, 64), material('--surface-raised', { roughness: 0.6, clearcoat: 0 }), 0, 0.15, 0);
+      mesh(new THREE.SphereGeometry(0.62, 64, 32), material('--accent'), -0.7, 0.92, 0.2);
+      mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), material('--series-2'), 0.75, 0.7, -0.35).rotation.y = Math.PI / 6;
+      mesh(new THREE.TorusGeometry(0.42, 0.14, 32, 96), material('--series-3'), 0.55, 0.58, 0.85).rotation.x = Math.PI / 2;
+    }
+    // Fit any model into a 2.4-unit box resting on the ground.
+    function fit(object) {
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      object.scale.multiplyScalar(2.4 / Math.max(size.x, size.y, size.z, 1e-6));
+      box.setFromObject(object);
+      const center = box.getCenter(new THREE.Vector3());
+      object.position.x -= center.x;
+      object.position.z -= center.z;
+      object.position.y -= box.min.y;
+    }
+
+    if (GLB_URL) {
+      try {
+        const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+        const gltf = await new GLTFLoader().loadAsync(GLB_URL);
+        gltf.scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+        fit(gltf.scene);
+        model.add(gltf.scene);
+      } catch {
+        note.textContent = 'No se pudo cargar el modelo; se muestran figuras de ejemplo.';
+        note.hidden = false;
+        addPrimitives();
+      }
+    } else {
+      addPrimitives();
+    }
+
+    // Orbit controls. Reduced motion: no auto-rotate and no inertia, unless the user turns it on.
+    const controls = new OrbitControls(camera, canvas);
+    controls.target.set(0, 0.8, 0);
+    controls.minDistance = 3;
+    controls.maxDistance = 14;
+    controls.maxPolarAngle = Math.PI * 0.49;
+    controls.autoRotateSpeed = 1.2;
+    controls.update();
+    controls.saveState();
+    let autoRotate = !reduce.matches;
+    function applyMotion() {
+      controls.autoRotate = autoRotate;
+      controls.enableDamping = !reduce.matches;
+      rotateBtn.setAttribute('aria-pressed', String(autoRotate));
+    }
+    reduce.addEventListener('change', () => { autoRotate = !reduce.matches; applyMotion(); });
+    rotateBtn.addEventListener('click', () => { autoRotate = !autoRotate; applyMotion(); });
+    resetBtn.addEventListener('click', () => controls.reset());
+    rotateBtn.disabled = false;
+    resetBtn.disabled = false;
+    applyMotion();
+
+    // Resize with the stage, not only the window.
+    function resize() {
+      const { width, height } = stage.getBoundingClientRect();
+      if (!width || !height) return;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+    new ResizeObserver(resize).observe(stage);
+    resize();
+
+    renderer.setAnimationLoop(() => {
+      controls.update();
+      renderer.render(scene, camera);
+      if (root.dataset.scene !== 'ready' && root.dataset.scene !== 'fallback') root.dataset.scene = 'ready';
+    });
+    window.SCENE3D = { THREE, scene, camera, renderer, controls, model };
+  }
+
+  start();
+</script>
+</body>
+</html>

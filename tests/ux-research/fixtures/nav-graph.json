@@ -1,0 +1,26 @@
+{
+  "tool": "ux-flow-audit/nav-graph",
+  "mode": "showcase",
+  "nodes": [
+    { "id": "inicio", "kind": "screen", "title": "Inicio" },
+    { "id": "ordenes", "kind": "screen", "title": "Órdenes" },
+    { "id": "detalle", "kind": "screen", "title": "Detalle de orden" },
+    { "id": "informes", "kind": "screen", "title": "Informes" },
+    { "id": "huerfana", "kind": "screen", "title": "Pantalla huérfana" },
+    { "id": "ajustes", "kind": "screen", "title": "Ajustes" },
+    { "id": "sheet:filtros", "kind": "sheet", "title": "Filtros" }
+  ],
+  "edges": [
+    { "role": "tecnico", "from": "inicio", "to": "ordenes" },
+    { "role": "tecnico", "from": "ordenes", "to": "detalle" },
+    { "role": "tecnico", "from": "ordenes", "to": "sheet:filtros" },
+    { "role": "supervisor", "from": "inicio", "to": "ordenes" },
+    { "role": "supervisor", "from": "inicio", "to": "informes" },
+    { "role": "supervisor", "from": "huerfana", "to": "ajustes" }
+  ],
+  "roles": [
+    { "id": "tecnico", "home": "inicio", "reachable": ["inicio", "ordenes", "detalle", "sheet:filtros"] },
+    { "id": "supervisor", "home": "inicio", "reachable": ["inicio", "ordenes", "informes"] }
+  ],
+  "orphans": ["huerfana"]
+}

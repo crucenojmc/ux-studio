@@ -1,0 +1,63 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-14",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Entregables",
+      "question": "¿Qué entregables de diseño UX necesitamos?",
+      "why": "Define qué skills corren: prototipo, sistema de diseño o textos. El formato del prototipo y el camino del sistema se preguntan después, solo si se eligen.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "prototipo",
+          "label": "Prototipo navegable (Recomendado)",
+          "description": "La app simulada y navegable, publicada como artifact.",
+          "consequence": "Sigue la pregunta de formato: la app sola, con recorridos guiados o el sistema UX completo."
+        },
+        {
+          "id": "sistema",
+          "label": "Sistema de diseño",
+          "description": "Tokens, componentes y su documentación, publicados como artifact.",
+          "consequence": "Sigue la pregunta de cómo resolverlo: reutilizar, desde el código, auditar una web o desde cero."
+        },
+        {
+          "id": "textos",
+          "label": "Textos de la interfaz",
+          "description": "Microcopy: etiquetas, mensajes de error, estados vacíos y tono.",
+          "consequence": "Respeta el vocabulario del dominio; los textos se proponen y nunca se editan en el producto."
+        }
+      ],
+      "unblocks": [
+        "F-14"
+      ],
+      "defaultIfUnanswered": {
+        "option": [
+          "prototipo"
+        ],
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

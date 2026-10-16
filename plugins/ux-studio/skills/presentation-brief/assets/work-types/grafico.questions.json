@@ -1,0 +1,117 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-10",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Piezas",
+      "question": "¿Qué piezas gráficas necesitamos?",
+      "why": "Define qué produce el skill de piezas gráficas y qué se publica como artifact de diapositivas o de lienzo.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "iconos",
+          "label": "Íconos (Recomendado)",
+          "description": "Íconos de interfaz en un solo estilo, listos para la app.",
+          "consequence": "Se entrega un set coherente en la carpeta de salida; el skill fija formatos y tamaños."
+        },
+        {
+          "id": "ilustraciones",
+          "label": "Ilustraciones",
+          "description": "Ilustraciones para estados vacíos, bienvenidas o piezas de comunicación.",
+          "consequence": "Piden un estilo: se exploran 2 o 3 direcciones antes de producir el set."
+        },
+        {
+          "id": "diapositivas",
+          "label": "Diapositivas",
+          "description": "Un mazo de diapositivas suelto, sin presentar un producto a varios públicos.",
+          "consequence": "Se publica como artifact de diapositivas, exportable a PPTX o PDF."
+        },
+        {
+          "id": "lienzo",
+          "label": "Lienzo de diseño",
+          "description": "Piezas visuales o alternativas en un lienzo para revisar y comentar.",
+          "consequence": "Se publica como artifact de lienzo; sirve para comparar alternativas."
+        }
+      ],
+      "unblocks": [
+        "F-10"
+      ],
+      "defaultIfUnanswered": {
+        "option": [
+          "iconos"
+        ],
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-11",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Estilo",
+      "question": "¿De dónde sale el estilo gráfico?",
+      "why": "Sin un estilo fijado las piezas no combinan con el producto; la marca del cliente necesita activos entregados y aprobados.",
+      "options": [
+        {
+          "id": "sistema",
+          "label": "Sistema de diseño existente (Recomendado)",
+          "description": "Las piezas usan los colores, la tipografía y el trazo del sistema de diseño del producto.",
+          "consequence": "Es lo más rápido y coherente con la app; si no hay sistema, se pregunta cómo resolverlo."
+        },
+        {
+          "id": "marca",
+          "label": "Marca aportada por el cliente",
+          "description": "Se usan los activos de marca que entregó el cliente.",
+          "consequence": "Solo con activos entregados y aprobación; nunca se reproducen marcas de terceros."
+        },
+        {
+          "id": "direcciones",
+          "label": "Estilo nuevo",
+          "description": "Se proponen 2 o 3 direcciones visuales para elegir.",
+          "consequence": "Suma una ronda de elección antes de producir; el estilo elegido queda registrado."
+        }
+      ],
+      "unblocks": [
+        "F-11"
+      ],
+      "defaultIfUnanswered": {
+        "option": "sistema",
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

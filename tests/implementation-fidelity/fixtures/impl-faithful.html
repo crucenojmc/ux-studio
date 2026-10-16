@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Implementation fixture (faithful)</title>
+<style>
+  html, body { margin: 0; background: #f8fafc; font-family: sans-serif; }
+  .layout { padding: 16px; }
+  .page-title { margin: 0 0 12px; font-size: 22px; font-weight: 600; line-height: 28px; color: #0f172a; }
+  .summary-card {
+    box-sizing: border-box; width: 240px; height: 120px; padding: 16px;
+    background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px;
+    animation: appear .4s ease-out both;
+  }
+  .summary-card p { margin: 0; font-size: 14px; line-height: 20px; color: #475569; }
+  .btn-primary {
+    display: block; margin-top: 12px; font-family: inherit; font-size: 14px; font-weight: 500; line-height: 20px;
+    padding: 8px 14px; border: 0; border-radius: 8px; background: #dc2626; color: #ffffff;
+    transition: background-color .2s ease;
+  }
+  .nonce { display: inline-block; margin-top: 8px; font-size: 12px; color: #64748b; }
+  @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+  <main class="layout">
+    <h1 class="page-title">Resumen</h1>
+    <section class="summary-card"><p>Pedidos pendientes: 12</p></section>
+    <button class="btn-primary" type="button">Confirmar</button>
+    <span class="nonce"></span>
+  </main>
+  <script>
+    document.querySelector('.nonce').textContent = 'ref ' + Math.random().toString(36).slice(2, 10);
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "ux-studio",
+  "owner": {
+    "name": "Mapplics"
+  },
+  "description": "Marketplace of the ux-studio plugin: prototypes, showcases and videos for UX work.",
+  "plugins": [
+    {
+      "name": "ux-studio",
+      "source": "./plugins/ux-studio",
+      "description": "Design functional prototypes, present them as scroll-story showcase pages with replayable user flows, tailor each presentation to its audience and brand, and turn the flows into narrated, captioned videos with HyperFrames."
+    }
+  ]
+}

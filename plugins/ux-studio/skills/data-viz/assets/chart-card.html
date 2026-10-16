@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha del gráfico</title>
+<!--
+  data-viz «Ficha del gráfico». Copy into the page, once: the first <style>, the <template> and the
+  last <script>. Then, per chart, one <figure class="dv-figure"> holding a figcaption, the chart
+  (class "dv-chart") and the chart spec that passed chart-check.mjs, as JSON in
+  <script type="application/json" class="dv-spec">. renderChartCards() builds the card from that
+  same spec, beside the chart on wide screens and right below it on narrow ones.
+  Colours, spacing and type come from the design system's tokens (tokens-contract.md) with fallbacks.
+-->
+<style>
+  .dv-figure {
+    --dv-surface: var(--surface-raised, light-dark(#ffffff, #161b22));
+    --dv-sunken: var(--surface-sunken, light-dark(#f3f4f6, #0d1117));
+    --dv-text: var(--text-primary, light-dark(#1f2328, #e6edf3));
+    --dv-muted: var(--text-secondary, light-dark(#57606a, #9da7b3));
+    --dv-border: var(--border-subtle, light-dark(#d0d7de, #30363d));
+    --dv-series: var(--series-1, light-dark(#0969da, #4493f8));
+    --dv-warn: var(--status-warn, light-dark(#7d4e00, #e3b341));
+    --dv-warn-bg: var(--status-warn-bg, light-dark(#fff8c5, #3b2e00));
+    --dv-gap: var(--space-4, 16px);
+    --dv-pad: var(--space-3, 12px);
+    --dv-tight: var(--space-1, 4px);
+    --dv-radius: var(--radius-md, 8px);
+    --dv-font: var(--font-sans, system-ui, sans-serif);
+    --dv-small: var(--text-caption-size, 0.875rem);
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas: "caption caption" "chart card";
+    gap: var(--dv-gap);
+    align-items: start;
+    margin: 0 0 var(--dv-gap);
+    font-family: var(--dv-font);
+    color: var(--dv-text);
+  }
+  .dv-figure > figcaption { grid-area: caption; display: grid; gap: var(--dv-tight); }
+  .dv-figure > figcaption strong { font-size: 1.125rem; }
+  .dv-figure > figcaption span { color: var(--dv-muted); font-size: var(--dv-small); }
+  .dv-chart { grid-area: chart; min-width: 0; }
+  .dv-chart svg { display: block; width: 100%; height: auto; }
+  .dv-axis { stroke: var(--dv-border); stroke-width: 1; }
+  .dv-bar { fill: var(--dv-series); }
+  .dv-tick { fill: var(--dv-muted); font: 13px var(--dv-font); }
+  .dv-value { fill: var(--dv-text); font: 600 13px var(--dv-font); }
+  .dv-card {
+    grid-area: card;
+    min-width: 0;
+    background: var(--dv-surface);
+    border: 1px solid var(--dv-border);
+    border-radius: var(--dv-radius);
+    padding: var(--dv-pad);
+    font-size: var(--dv-small);
+    overflow-wrap: anywhere;
+  }
+  .dv-card > summary { font-weight: 600; cursor: pointer; }
+  .dv-card dl { margin: var(--dv-pad) 0 0; }
+  .dv-card dt { font-weight: 600; margin-top: var(--dv-pad); }
+  .dv-card dd { margin: var(--dv-tight) 0 0; }
+  .dv-card ul { margin: 0; padding-left: 1.1em; }
+  .dv-card .dv-pairs { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--dv-tight) var(--dv-pad); margin: 0; padding: var(--dv-pad); background: var(--dv-sunken); border-radius: var(--dv-radius); }
+  .dv-card .dv-pairs dt { margin: 0; color: var(--dv-muted); font-weight: 400; }
+  .dv-card .dv-pairs dd { margin: 0; }
+  .dv-demo:not([hidden]) { display: inline-block; margin: var(--dv-pad) 0 0; padding: 2px var(--dv-pad); border-radius: var(--dv-radius); background: var(--dv-warn-bg); color: var(--dv-warn); font-weight: 600; }
+  @media (max-width: 47.99rem) {
+    .dv-figure { grid-template-columns: minmax(0, 1fr); grid-template-areas: "caption" "chart" "card"; }
+    .dv-card .dv-pairs { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media print { .dv-card { break-inside: avoid; } }
+</style>
+<style>
+  /* This preview page only. */
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 16px; background: var(--surface-page, Canvas); color: var(--text-primary, CanvasText); }
+</style>
+</head>
+<body>
+
+<template id="dv-card-template">
+  <details class="dv-card" open>
+    <summary>Ficha del gráfico</summary>
+    <p class="dv-demo" hidden>Datos de demostración</p>
+    <dl>
+      <dt>Pregunta que responde</dt><dd data-field="question"></dd>
+      <dt>Por qué este gráfico</dt><dd data-field="why"></dd>
+      <dt>Alternativas descartadas y por qué</dt><dd><ul data-field="alternatives"></ul></dd>
+      <dt>Fuente de los datos</dt><dd data-field="source"></dd>
+      <dt>Matemática</dt><dd data-field="math"></dd>
+      <dt>Limitaciones y cómo leerlo</dt><dd data-field="limitations"></dd>
+    </dl>
+  </details>
+</template>
+
+<figure class="dv-figure">
+  <figcaption>
+    <strong>Pedidos cerrados por mes en el taller de demostración</strong>
+    <span>Enero a junio · n = 782 pedidos · Datos de demostración</span>
+  </figcaption>
+  <div class="dv-chart" role="img" aria-label="Columnas de pedidos cerrados por mes, de enero a junio: 118, 124, 141, 129, 133 y 137.">
+    <svg viewBox="0 0 600 320" aria-hidden="true">
+      <line class="dv-axis" x1="50" y1="40" x2="590" y2="40"/>
+      <line class="dv-axis" x1="50" y1="120" x2="590" y2="120"/>
+      <line class="dv-axis" x1="50" y1="200" x2="590" y2="200"/>
+      <line class="dv-axis" x1="50" y1="280" x2="590" y2="280"/>
+      <text class="dv-tick" x="42" y="284" text-anchor="end">0</text>
+      <text class="dv-tick" x="42" y="204" text-anchor="end">50</text>
+      <text class="dv-tick" x="42" y="124" text-anchor="end">100</text>
+      <text class="dv-tick" x="42" y="44" text-anchor="end">150</text>
+      <rect class="dv-bar" x="70" y="91.2" width="60" height="188.8"/>
+      <rect class="dv-bar" x="155" y="81.6" width="60" height="198.4"/>
+      <rect class="dv-bar" x="240" y="54.4" width="60" height="225.6"/>
+      <rect class="dv-bar" x="325" y="73.6" width="60" height="206.4"/>
+      <rect class="dv-bar" x="410" y="67.2" width="60" height="212.8"/>
+      <rect class="dv-bar" x="495" y="60.8" width="60" height="219.2"/>
+      <text class="dv-value" x="100" y="84" text-anchor="middle">118</text>
+      <text class="dv-value" x="185" y="74" text-anchor="middle">124</text>
+      <text class="dv-value" x="270" y="47" text-anchor="middle">141</text>
+      <text class="dv-value" x="355" y="66" text-anchor="middle">129</text>
+      <text class="dv-value" x="440" y="60" text-anchor="middle">133</text>
+      <text class="dv-value" x="525" y="53" text-anchor="middle">137</text>
+      <text class="dv-tick" x="100" y="302" text-anchor="middle">Ene</text>
+      <text class="dv-tick" x="185" y="302" text-anchor="middle">Feb</text>
+      <text class="dv-tick" x="270" y="302" text-anchor="middle">Mar</text>
+      <text class="dv-tick" x="355" y="302" text-anchor="middle">Abr</text>
+      <text class="dv-tick" x="440" y="302" text-anchor="middle">May</text>
+      <text class="dv-tick" x="525" y="302" text-anchor="middle">Jun</text>
+    </svg>
+  </div>
+  <script type="application/json" class="dv-spec">
+{
+  "version": "1",
+  "id": "pedidos-por-mes",
+  "title": "Pedidos cerrados por mes en el taller de demostración",
+  "subtitle": "Enero a junio · n = 782 pedidos",
+  "question": "comparison",
+  "type": "column",
+  "data": { "ref": "data/pedidos-mensuales.csv", "demo": true, "sample": false, "estimate": false },
+  "encodings": {
+    "x": { "field": "mes", "type": "ordinal", "label": "Mes" },
+    "y": { "field": "pedidos", "type": "quantitative", "label": "Pedidos cerrados", "unit": "pedidos", "scale": "linear", "zero": true, "aggregate": "count" }
+  },
+  "display": { "threeD": false, "showN": true },
+  "card": {
+    "question": "¿En qué meses del primer semestre se cerraron más pedidos?",
+    "why": "Columnas sobre una escala común que empieza en cero: la posición y el largo permiten comparar seis meses con precisión.",
+    "alternatives": [
+      { "chart": "Línea", "reason": "Sugiere una evolución continua; con seis meses la pregunta es comparar meses, no seguir una tendencia." },
+      { "chart": "Torta", "reason": "Los meses no son partes de un todo que interese, y comparar ángulos es menos preciso que comparar posiciones." }
+    ],
+    "source": {
+      "origin": "Datos de demostración: archivo ficticio data/pedidos-mensuales.csv, sin relación con un sistema real.",
+      "extraction": "Conteo de filas con estado «cerrado», agrupadas por mes de cierre.",
+      "period": "Del 1 de enero al 30 de junio.",
+      "filters": "Solo pedidos cerrados; se excluyen los anulados.",
+      "cutoff": "1 de julio",
+      "n": 782
+    },
+    "math": {
+      "formula": "pedidos(mes) = cantidad de pedidos con fecha de cierre dentro del mes",
+      "aggregation": "Conteo por mes calendario.",
+      "units": "Pedidos por mes.",
+      "transformations": "Ninguna.",
+      "uncertainty": "No aplica: es el conteo completo del período, no una muestra.",
+      "outliers": "No se excluye ningún valor.",
+      "assumptions": "La fecha de cierre registrada es la del día en que se cerró el pedido."
+    },
+    "limitations": "Muestra la cantidad de pedidos, no su importe. Los meses tienen distinta cantidad de días hábiles."
+  }
+}
+  </script>
+</figure>
+
+<script>
+  (() => {
+    const SOURCE = [['origin', 'Origen'], ['extraction', 'Consulta o extracción'], ['period', 'Período'], ['filters', 'Filtros'],
+      ['cutoff', 'Fecha de corte'], ['n', 'n']];
+    const MATH = [['formula', 'Fórmula'], ['aggregation', 'Agregación'], ['units', 'Unidades'], ['transformations', 'Transformaciones'],
+      ['uncertainty', 'Incertidumbre'], ['outliers', 'Valores atípicos'], ['assumptions', 'Supuestos']];
+
+    const el = (tag, text, className) => {
+      const node = document.createElement(tag);
+      if (text != null) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    };
+
+    const pairs = (fields, values) => {
+      const dl = el('dl', null, 'dv-pairs');
+      for (const [key, label] of fields) {
+        const value = key === 'n' ? Number(values[key]).toLocaleString('es') : values[key];
+        dl.append(el('dt', label), el('dd', value));
+      }
+      return dl;
+    };
+
+    /** Builds the card of every .dv-figure from its spec; figures that already have one are left as they are. */
+    function renderChartCards(root = document) {
+      const template = document.getElementById('dv-card-template');
+      for (const figure of root.querySelectorAll('figure.dv-figure')) {
+        const json = figure.querySelector('script.dv-spec');
+        if (!json || figure.querySelector('.dv-card')) continue;
+        const spec = JSON.parse(json.textContent);
+        const card = template.content.firstElementChild.cloneNode(true);
+        const slot = (name) => card.querySelector(`[data-field="${name}"]`);
+        card.id = `${spec.id}-ficha`;
+        card.querySelector('.dv-demo').hidden = !spec.data.demo;
+        slot('question').textContent = spec.card.question;
+        slot('why').textContent = spec.card.why;
+        for (const alt of spec.card.alternatives) {
+          const item = el('li');
+          item.append(el('strong', alt.chart), document.createTextNode(`: ${alt.reason}`));
+          slot('alternatives').append(item);
+        }
+        slot('source').append(pairs(SOURCE, spec.card.source));
+        slot('math').append(pairs(MATH, spec.card.math));
+        slot('limitations').textContent = spec.card.limitations;
+        figure.querySelector('.dv-chart')?.setAttribute('aria-describedby', card.id);
+        figure.append(card);
+      }
+    }
+
+    window.renderChartCards = renderChartCards;
+    renderChartCards();
+  })();
+</script>
+</body>
+</html>

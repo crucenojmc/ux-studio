@@ -1,0 +1,15 @@
+{
+  "name": "ux-studio-ux-recipes-starters-tests",
+  "private": true,
+  "type": "module",
+  "description": "Checks for the ux-studio ux-recipes HTML starters (static and Chromium render) and the Claude Design recipe files.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "project": "Taller demo",
+  "platform": "mobile",
+  "language": "es",
+  "screens": [
+    {
+      "id": "ordenes",
+      "title": "Órdenes",
+      "kind": "list",
+      "copy": {
+        "empty": "Todavía no hay órdenes. Creá la primera desde «Nueva orden».",
+        "loading": "Cargando órdenes…",
+        "error": { "network": "No pudimos cargar las órdenes. Revisá la conexión y probá de nuevo." }
+      }
+    },
+    {
+      "id": "orden-detalle",
+      "title": "Detalle de orden",
+      "kind": "detail",
+      "hasForm": true,
+      "copy": { "success": { "text": "Orden cerrada." } }
+    },
+    {
+      "id": "ajustes",
+      "title": "Ajustes",
+      "kind": "static"
+    }
+  ],
+  "components": [
+    { "id": "buscador", "title": "Buscador de vehículos", "kind": "list", "copy": { "empty": "" } }
+  ]
+}

@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Keyboard trap</title></head>
+<body>
+  <button type="button" style="min-width:44px;min-height:32px">Antes</button>
+  <input id="trap" aria-label="Trampa" style="min-height:28px" onkeydown="if (event.key === 'Tab') event.preventDefault()">
+  <button type="button" style="min-width:44px;min-height:32px">Despues</button>
+</body>
+</html>

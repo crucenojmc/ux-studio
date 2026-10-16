@@ -1,0 +1,103 @@
+{
+  "name": "Ladera",
+  "version": 1,
+  "color": {
+    "themes": [
+      { "id": "light", "name": "Light" },
+      { "id": "dark", "name": "Dark" }
+    ],
+    "tokens": [
+      { "name": "surface-page", "value": { "light": "#f7f5f0", "dark": "#151413" }, "usage": "Page background behind everything." },
+      { "name": "surface-raised", "value": { "light": "#ffffff", "dark": "#1f1e1b" }, "usage": "Cards, table rows, inputs at rest." },
+      { "name": "surface-overlay", "value": { "light": "#ffffff", "dark": "#2a2825" }, "usage": "Menus, toasts, sheets and dialogs; always with shadow-overlay." },
+      { "name": "surface-sunken", "value": { "light": "#eeebe3", "dark": "#0e0d0c" }, "usage": "Wells, segmented-control tracks, code blocks." },
+      { "name": "text-primary", "value": { "light": "#1c1b19", "dark": "#f2efe8" }, "usage": "Body text and headings on any surface-* token." },
+      { "name": "text-secondary", "value": { "light": "#57534b", "dark": "#bdb7aa" }, "usage": "Supporting text, metadata, table secondary columns." },
+      { "name": "text-tertiary", "value": { "light": "#78736a", "dark": "#8f897d" }, "usage": "Placeholders and disabled labels only; never the only carrier of meaning." },
+      { "name": "border-subtle", "value": { "light": "#e2ded4", "dark": "#2f2d29" }, "usage": "Dividers and card edges that are decoration, never the only edge of a control." },
+      { "name": "border-strong", "value": { "light": "#8a8478", "dark": "#7d776c" }, "usage": "Input, select and checkbox outlines; 3:1 against surface-page." },
+      { "name": "accent", "value": { "light": "#1f5f5b", "dark": "#62b5aa" }, "usage": "Primary action fill, selected state, links (underlined)." },
+      { "name": "accent-hover", "value": { "light": "#174a47", "dark": "#80c6bc" }, "usage": "Hover and pressed state of an accent fill." },
+      { "name": "on-accent", "value": { "light": "#ffffff", "dark": "#0d1f1d" }, "usage": "Label and icon on an accent fill." },
+      { "name": "focus-ring", "value": "{accent}", "usage": "Keyboard focus outline, 2px with a 2px offset; an alias of accent in every theme." },
+      { "name": "status-ok", "value": { "light": "#2e6a39", "dark": "#86c793" }, "usage": "Success text and icon on status-ok-bg or a surface." },
+      { "name": "status-ok-bg", "value": { "light": "#e2f0e3", "dark": "#1b2e1f" }, "usage": "Success badge and toast background." },
+      { "name": "status-warn", "value": { "light": "#835600", "dark": "#e8b65c" }, "usage": "Warning text and icon; always with the word or icon, never color alone." },
+      { "name": "status-warn-bg", "value": { "light": "#fbefd5", "dark": "#33280f" }, "usage": "Warning badge and toast background." },
+      { "name": "status-danger", "value": { "light": "#ad251d", "dark": "#f2918a" }, "usage": "Error text, destructive actions and their icons." },
+      { "name": "status-danger-bg", "value": { "light": "#fbe5e3", "dark": "#3a1c1a" }, "usage": "Error badge and toast background." },
+      { "name": "status-info", "value": { "light": "#1d5a8c", "dark": "#86b9e5" }, "usage": "Informational text and icon." },
+      { "name": "status-info-bg", "value": { "light": "#e2eef8", "dark": "#172a3b" }, "usage": "Informational badge and toast background." },
+      { "name": "series-1", "value": { "light": "#1f5f5b", "dark": "#62b5aa" }, "usage": "First chart series; the brand teal." },
+      { "name": "series-2", "value": { "light": "#b8731f", "dark": "#e7a65c" }, "usage": "Second chart series; lighter than series-1 so the two differ in lightness too." },
+      { "name": "series-3", "value": { "light": "#4f78b8", "dark": "#8fb0e3" }, "usage": "Third chart series." },
+      { "name": "series-4", "value": { "light": "#6f7a2a", "dark": "#b3bb6a" }, "usage": "Fourth chart series; olive, never next to status-ok in the same chart." },
+      { "name": "series-5", "value": { "light": "#7a3e60", "dark": "#c98bad" }, "usage": "Fifth chart series." }
+    ]
+  },
+  "type": {
+    "fonts": [],
+    "families": {
+      "sans": "\"Instrument Sans\", system-ui, sans-serif",
+      "display": "\"Instrument Serif\", Georgia, serif",
+      "mono": "\"JetBrains Mono\", ui-monospace, monospace"
+    },
+    "groups": [
+      {
+        "name": "Display",
+        "family": "display",
+        "styles": [
+          { "name": "display", "fontSize": "48px", "lineHeight": "52px", "fontWeight": 400, "sample": "Cosecha de octubre", "usage": "One per screen: hero titles and cover moments." }
+        ]
+      },
+      {
+        "name": "Text",
+        "family": "sans",
+        "styles": [
+          { "name": "title", "fontSize": "28px", "lineHeight": "34px", "fontWeight": 600, "sample": "Pedidos de la semana", "usage": "Page titles." },
+          { "name": "heading", "fontSize": "20px", "lineHeight": "28px", "fontWeight": 600, "sample": "Pendientes de confirmar", "usage": "Section and card headings." },
+          { "name": "body", "fontSize": "16px", "lineHeight": "24px", "fontWeight": 400, "sample": "Tres pedidos esperan confirmación del depósito.", "usage": "Running text; lines under 75 characters." },
+          { "name": "label", "fontSize": "14px", "lineHeight": "20px", "fontWeight": 500, "sample": "Fecha de entrega", "usage": "Buttons, form labels, tabs." },
+          { "name": "caption", "fontSize": "13px", "lineHeight": "18px", "fontWeight": 400, "sample": "Actualizado hace 2 min", "usage": "Metadata; the smallest size in the system." }
+        ]
+      }
+    ]
+  },
+  "spacing": {
+    "note": "4px base.",
+    "tokens": [
+      { "name": "space-1", "value": "4px", "usage": "Icon-to-label gap." },
+      { "name": "space-2", "value": "8px", "usage": "Inside compact controls." },
+      { "name": "space-3", "value": "12px", "usage": "Between related rows." },
+      { "name": "space-4", "value": "16px", "usage": "Card padding, input padding." },
+      { "name": "space-5", "value": "24px", "usage": "Between groups inside a section." },
+      { "name": "space-6", "value": "32px", "usage": "Between sections." },
+      { "name": "space-7", "value": "48px", "usage": "Page gutters on desktop." },
+      { "name": "space-8", "value": "64px", "usage": "Hero and cover breathing room." }
+    ]
+  },
+  "radius": {
+    "note": "Soft but not round; pills only for badges and segmented controls.",
+    "tokens": [
+      { "name": "radius-sm", "value": "4px", "usage": "Inputs, checkboxes, table cells." },
+      { "name": "radius-md", "value": "8px", "usage": "Buttons, cards, toasts." },
+      { "name": "radius-lg", "value": "14px", "usage": "Sheets, dialogs, large cards." },
+      { "name": "radius-pill", "value": "9999px", "usage": "Badges and segmented controls." }
+    ]
+  },
+  "shadow": {
+    "note": "Two elevations; dark uses deeper, tighter shadows.",
+    "tokens": [
+      {
+        "name": "shadow-raised",
+        "value": { "light": "0 1px 2px #1c1b1914, 0 2px 6px #1c1b1910", "dark": "0 1px 3px #000000a6" },
+        "usage": "Cards and inputs at rest."
+      },
+      {
+        "name": "shadow-overlay",
+        "value": { "light": "0 6px 16px #1c1b1924, 0 16px 40px -8px #1c1b192e", "dark": "0 12px 32px -4px #000000cc" },
+        "usage": "Menus, toasts, sheets and dialogs on surface-overlay."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Prototype fixture</title>
+<style>
+  html, body { margin: 0; background: #f8fafc; font-family: sans-serif; }
+  [data-proto=wrap] { padding: 16px; }
+  [data-proto=title] { margin: 0 0 12px; font-size: 22px; font-weight: 600; line-height: 28px; color: #0f172a; }
+  [data-proto=card] {
+    box-sizing: border-box; width: 240px; height: 120px; padding: 16px;
+    background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px;
+    animation: fade-in .4s ease-out both;
+  }
+  [data-proto=card] p { margin: 0; font-size: 14px; line-height: 20px; color: #475569; }
+  [data-proto=cta] {
+    display: block; margin-top: 12px; font-family: inherit; font-size: 14px; font-weight: 500; line-height: 20px;
+    padding: 8px 14px; border: 0; border-radius: 8px; background: #dc2626; color: #ffffff;
+    transition: background-color .2s ease;
+  }
+  [data-proto=nonce] { display: inline-block; margin-top: 8px; font-size: 12px; color: #64748b; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+  <div data-proto="wrap">
+    <h1 data-proto="title">Resumen</h1>
+    <div data-proto="card"><p>Pedidos pendientes: 12</p></div>
+    <button data-proto="cta" type="button">Confirmar</button>
+    <span data-proto="nonce"></span>
+  </div>
+  <script>
+    document.querySelector('[data-proto=nonce]').textContent = 'ref ' + Math.random().toString(36).slice(2, 10);
+  </script>
+</body>
+</html>

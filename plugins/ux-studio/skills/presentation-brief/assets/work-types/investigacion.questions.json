@@ -1,0 +1,117 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-12",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Entregables",
+      "question": "¿Qué entregables de investigación y arquitectura necesitamos?",
+      "why": "Define qué produce el skill de investigación; cada entregable tiene su método y su costo.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "plan",
+          "label": "Plan de investigación (Recomendado)",
+          "description": "Objetivos, preguntas, participantes y método para validar con usuarios.",
+          "consequence": "Es la base de los demás entregables y no requiere usuarios todavía."
+        },
+        {
+          "id": "personas",
+          "label": "Personas",
+          "description": "Perfiles de los usuarios con sus tareas, frecuencias y dificultades.",
+          "consequence": "Sin evidencia de usuarios se rotulan como hipótesis; nunca se inventan datos."
+        },
+        {
+          "id": "mapa",
+          "label": "Mapa del sitio",
+          "description": "Estructura de pantallas y navegación, por rol.",
+          "consequence": "Sale del código o del brief; las pantallas sin entrada quedan marcadas."
+        },
+        {
+          "id": "wireframes",
+          "label": "Wireframes",
+          "description": "Pantallas de baja fidelidad para acordar contenido y jerarquía.",
+          "consequence": "Son rápidos de cambiar; el prototipo navegable es otro tipo de trabajo, Diseño UX y prototipos."
+        }
+      ],
+      "unblocks": [
+        "F-12"
+      ],
+      "defaultIfUnanswered": {
+        "option": [
+          "plan"
+        ],
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-13",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Evidencia",
+      "question": "¿Con qué evidencia sobre los usuarios contamos?",
+      "why": "Decide si las personas y los flujos son hallazgos o hipótesis; nunca se inventan frecuencias ni volúmenes.",
+      "options": [
+        {
+          "id": "codigo",
+          "label": "El producto y su código (Recomendado)",
+          "description": "Roles, rutas, permisos y tareas que muestra la app.",
+          "consequence": "Lo que el código no dice, como frecuencias y volúmenes, queda como pregunta."
+        },
+        {
+          "id": "datos",
+          "label": "Entrevistas o datos del equipo",
+          "description": "Notas de entrevistas, encuestas o métricas que aporta el equipo.",
+          "consequence": "Las personas se apoyan en datos reales y citan sus fuentes."
+        },
+        {
+          "id": "ninguna",
+          "label": "Ninguna todavía",
+          "description": "Solo el pedido y lo que sabe el equipo.",
+          "consequence": "Todo se rotula como hipótesis y el plan dice cómo validarlo."
+        }
+      ],
+      "unblocks": [
+        "F-13"
+      ],
+      "defaultIfUnanswered": {
+        "option": "codigo",
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

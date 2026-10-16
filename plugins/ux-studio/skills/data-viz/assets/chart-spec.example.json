@@ -1,0 +1,52 @@
+{
+  "$schema": "./chart-spec.schema.json",
+  "version": "1",
+  "id": "pedidos-diarios-previstos",
+  "title": "Pedidos diarios previstos para julio de 2026, con su intervalo",
+  "subtitle": "Banda: intervalo del 80 % · historia: 181 días",
+  "question": "uncertainty",
+  "type": "line",
+  "data": {
+    "ref": "data/pronostico-julio.csv",
+    "demo": true,
+    "sample": false,
+    "estimate": true,
+    "values": [
+      { "dia": "2026-07-01", "previstos": 42, "min80": 35, "max80": 50 },
+      { "dia": "2026-07-02", "previstos": 44, "min80": 36, "max80": 53 },
+      { "dia": "2026-07-03", "previstos": 39, "min80": 31, "max80": 48 }
+    ]
+  },
+  "encodings": {
+    "x": { "field": "dia", "type": "temporal", "label": "Día", "scale": "time" },
+    "y": { "field": "previstos", "type": "quantitative", "label": "Pedidos por día", "unit": "pedidos", "scale": "linear", "zero": true }
+  },
+  "uncertainty": { "kind": "band", "level": 0.8, "shown": true, "fields": ["min80", "max80"] },
+  "display": { "threeD": false, "showN": true },
+  "card": {
+    "question": "¿Cuántos pedidos por día cabe esperar en julio, y con qué margen?",
+    "why": "Una línea sobre el tiempo con una banda: la posición muestra el valor previsto día a día y el ancho de la banda, cuánto puede variar.",
+    "alternatives": [
+      { "chart": "Columnas por día", "reason": "Muestran un único valor por día y esconden el margen del pronóstico." },
+      { "chart": "Tabla con mínimo y máximo", "reason": "Sirve para consultar un día puntual, pero no deja ver de un vistazo la forma del mes." }
+    ],
+    "source": {
+      "origin": "Datos de demostración: pronóstico ficticio en data/pronostico-julio.csv.",
+      "extraction": "Salida del modelo de pronóstico con el valor previsto y los límites del 80 % por día.",
+      "period": "Del 1 al 31 de julio de 2026; historia usada del 1 de enero al 30 de junio.",
+      "filters": "Pedidos de todos los canales; sin los días con cierre total.",
+      "cutoff": "2026-06-30",
+      "n": 181
+    },
+    "math": {
+      "formula": "previstos(día) = nivel(semana) × factor(día de la semana)",
+      "aggregation": "Conteo diario de pedidos en la historia; promedio por día de la semana para el factor.",
+      "units": "Pedidos por día.",
+      "transformations": "Ninguna sobre los valores; los feriados se tratan como domingos.",
+      "uncertainty": "Intervalo del 80 % a partir de los errores del modelo en los últimos 60 días: 1 de cada 5 días puede quedar fuera de la banda.",
+      "outliers": "Se excluyen 2 días con cierre total; ningún otro valor se descarta.",
+      "assumptions": "Julio se comporta como el semestre anterior; no hay promociones previstas."
+    },
+    "limitations": "Es una estimación, no un compromiso. La banda no cubre cambios que la historia no muestra, como una promoción nueva."
+  }
+}

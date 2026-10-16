@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Login fixture</title></head>
+<body>
+  <p>Signing in...</p>
+  <script>
+    // Stands in for the user logging in: after a moment the session cookie exists and the app shell appears.
+    setTimeout(() => {
+      document.cookie = 'session=abc123; path=/';
+      const shell = document.createElement('div');
+      shell.id = 'app-shell';
+      shell.textContent = 'Signed in';
+      document.body.appendChild(shell);
+    }, 400);
+  </script>
+</body>
+</html>

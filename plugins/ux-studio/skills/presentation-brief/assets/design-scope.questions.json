@@ -1,0 +1,108 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-02",
+      "topic": "scope",
+      "priority": "high",
+      "round": 2,
+      "header": "Plataforma",
+      "question": "¿Para qué plataforma diseñamos?",
+      "why": "Vale para todos los módulos: define qué marcos se diseñan, se auditan, se miden y se filman, y con qué tamaños de pantalla.",
+      "options": [
+        {
+          "id": "web-mobile",
+          "label": "Web y mobile (Recomendado)",
+          "description": "La misma app en el navegador de escritorio y en el teléfono.",
+          "consequence": "Se diseñan, auditan, miden y filman los dos marcos; hay el doble de pantallas para revisar."
+        },
+        {
+          "id": "web",
+          "label": "Web",
+          "description": "Solo la app en el navegador de escritorio.",
+          "consequence": "Se trabaja solo el marco de escritorio; el teléfono no se diseña ni se mide."
+        },
+        {
+          "id": "mobile",
+          "label": "Mobile",
+          "description": "Solo la app en el teléfono.",
+          "consequence": "Se trabaja solo el marco del teléfono; el escritorio no se diseña ni se mide."
+        }
+      ],
+      "unblocks": [
+        "F-02"
+      ],
+      "defaultIfUnanswered": {
+        "option": "web-mobile",
+        "note": "Se aplica la opción inferida del repositorio y se rotula como supuesto en el brief."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Alcance del diseño"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-03",
+      "topic": "scope",
+      "priority": "high",
+      "round": 2,
+      "header": "Roles",
+      "question": "¿Los flujos cambian según el rol del usuario?",
+      "why": "Vale para todos los módulos: define qué roles se diseñan, se auditan y se filman, y si el prototipo muestra un selector de rol.",
+      "options": [
+        {
+          "id": "todos",
+          "label": "Varios roles, diseño completo para cada uno (Recomendado)",
+          "description": "Cada rol ve sus pantallas y sus flujos; el prototipo permite cambiar de rol.",
+          "consequence": "Se diseña y se audita cada rol; las pantallas que un rol no ve muestran qué rol sí las ve."
+        },
+        {
+          "id": "foco",
+          "label": "Varios roles, uno en foco",
+          "description": "El producto tiene varios roles, pero el trabajo se centra en uno.",
+          "consequence": "Solo aparecen las pantallas y los flujos de ese rol; los demás quedan fuera. Después se pregunta qué rol es."
+        },
+        {
+          "id": "uno",
+          "label": "Un solo rol",
+          "description": "La app tiene un solo tipo de usuario, o los flujos son los mismos para todos.",
+          "consequence": "No hay selector de rol; se diseña y se audita un único recorrido por tarea."
+        }
+      ],
+      "unblocks": [
+        "F-03"
+      ],
+      "defaultIfUnanswered": {
+        "option": "todos",
+        "note": "Se aplica la opción inferida del repositorio y se rotula como supuesto en el brief."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Alcance del diseño"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

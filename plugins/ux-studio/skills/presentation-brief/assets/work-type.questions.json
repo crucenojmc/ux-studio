@@ -1,0 +1,66 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-01",
+      "topic": "scope",
+      "priority": "high",
+      "round": 1,
+      "header": "Trabajo",
+      "question": "¿Qué tipo de trabajo necesitamos?",
+      "why": "Fija el camino del brief: la presentación usa el brief completo; los demás tipos, un brief mínimo con 2 o 3 preguntas propias. Se muestran los 4 tipos más probables; los demás se eligen con «Otro».",
+      "options": [
+        {
+          "id": "presentacion",
+          "label": "Presentación de un producto (Recomendado)",
+          "description": "Mostrar un producto a públicos concretos con un prototipo presentable, diapositivas o video.",
+          "consequence": "Brief completo: públicos, plan de módulos y formato de la presentación; es el camino más largo."
+        },
+        {
+          "id": "diseno-ux",
+          "label": "Diseño UX y prototipos",
+          "description": "Un prototipo navegable, un sistema de diseño o los textos de la interfaz.",
+          "consequence": "Brief mínimo y hasta 3 preguntas propias; el resultado se publica como artifact."
+        },
+        {
+          "id": "grafico",
+          "label": "Diseño gráfico",
+          "description": "Íconos, ilustraciones, piezas gráficas, diapositivas o un lienzo de diseño.",
+          "consequence": "Brief mínimo y 2 preguntas propias: qué piezas y de dónde sale el estilo."
+        },
+        {
+          "id": "auditoria",
+          "label": "Auditoría y medición",
+          "description": "Medir la utilidad de los flujos, la accesibilidad o la fidelidad de lo implementado.",
+          "consequence": "Brief mínimo y 2 preguntas propias: qué se mide y sobre qué; el producto no se toca."
+        }
+      ],
+      "unblocks": [
+        "F-01"
+      ],
+      "defaultIfUnanswered": {
+        "option": "presentacion",
+        "note": "Se aplica el tipo inferido del pedido y se rotula como supuesto en el brief."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Tipo de trabajo"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

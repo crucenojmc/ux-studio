@@ -1,0 +1,6 @@
+[
+  { "id": "f-pedidos", "name": "Ver pedidos", "roles": [], "match": { "url": "/pedidos" } },
+  { "id": "f-reportes", "name": "Ver reportes", "roles": [], "match": { "text": "Reportes" } },
+  { "id": "f-auditoria", "name": "Exportar auditoría", "roles": [], "match": { "text": "Auditoría" } },
+  { "id": "f-conciliacion", "name": "Conciliar", "roles": [], "match": { "url": "/huerfana" } }
+]

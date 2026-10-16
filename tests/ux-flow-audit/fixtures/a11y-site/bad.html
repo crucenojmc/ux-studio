@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Seeded violations</title>
+<style>
+  body { margin: 16px; font: 16px/1.5 sans-serif; color: #111; background: #fff; }
+  .row { margin: 8px 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #spinner { width: 40px; height: 40px; background: #1a56db; animation: spin 1s linear infinite; }
+  #noring { outline: none; border: 0; background: #1a56db; color: #fff; padding: 8px 16px; }
+  #tiny { width: 12px; height: 12px; padding: 0; }
+  #emptylink { display: inline-block; min-width: 32px; min-height: 32px; }
+  input { border: 2px solid #767676; background: #fff; padding: 4px; }
+  #faintborder { border: 1px solid #dddddd; }
+</style>
+</head>
+<body>
+  <h1>Titulo</h1>
+  <h3 id="skipped">Salto de nivel</h3>
+  <p id="lowtext" class="row" style="color:#aaaaaa;background:#ffffff">Texto con poco contraste</p>
+  <p id="largelow" class="row" style="font-size:32px;color:#999999;background:#ffffff">Grande bajo</p>
+  <p id="largemid" class="row" style="font-size:32px;color:#8a8a8a;background:#ffffff">Grande suficiente</p>
+  <div class="row" style="background:#000000"><p id="ontransparent" style="margin:0;color:#333333">Sobre fondo transparente</p></div>
+  <div class="row"><input id="faintborder" aria-label="Borde tenue" type="text"></div>
+  <div class="row"><button id="iconbtn" type="button"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h18v18H3z" fill="#111"/></svg></button> <button id="tiny" type="button" aria-label="Diminuto"></button></div>
+  <div class="row"><a id="emptylink" href="#top"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" width="24" height="24"></a></div>
+  <div class="row"><input id="nolabel" type="text"></div>
+  <div class="row"><img id="noalt" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="40" height="40"></div>
+  <div class="row"><span id="dup">uno</span> <span id="dup">dos</span></div>
+  <div class="row"><div id="badrole" role="buton" style="display:inline-block;min-width:60px;min-height:30px">Rol</div></div>
+  <section id="badref" aria-labelledby="ghost" class="row">Seccion</section>
+  <div class="row"><div id="fakebtn" role="button" onclick="void 0" style="display:inline-block;min-width:60px;min-height:30px">Hacer</div></div>
+  <div class="row"><button id="negtab" type="button" tabindex="-1">Saltado</button></div>
+  <div class="row"><button id="noring" type="button">Sin anillo</button></div>
+  <div class="row"><div id="spinner"></div></div>
+</body>
+</html>

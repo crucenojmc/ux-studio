@@ -1,0 +1,6 @@
+[
+  { "id": "feat-detalle", "name": "Ver detalle de pedido", "roles": ["operador"], "match": { "screen": "detalle" } },
+  { "id": "feat-config", "name": "Configurar parámetros", "roles": ["operador", "admin"], "match": { "screen": "config" } },
+  { "id": "feat-conciliar", "name": "Conciliar", "roles": ["operador", "admin"], "match": { "screen": "huerfana" } },
+  { "id": "feat-stock-texto", "name": "Consultar stock", "roles": ["operador"], "match": { "text": "ver stock" } }
+]

@@ -1,0 +1,18 @@
+[
+  { "path": "", "title": "Inicio" },
+  { "path": "ingreso", "title": "Ingreso" },
+  {
+    "path": "ordenes",
+    "title": "Órdenes",
+    "roles": ["tecnico", "supervisor"],
+    "children": [
+      { "path": "", "title": "Lista" },
+      { "path": ":id", "title": "Detalle" },
+      { "path": ":id/cierre", "title": "Cierre", "roles": ["tecnico"] }
+    ]
+  },
+  { "path": "informes", "title": "Informes", "roles": ["supervisor"] },
+  { "path": "legado", "title": "Pantalla legada", "nav": false },
+  { "path": "viejo", "redirectTo": "ordenes" },
+  { "path": "**", "redirectTo": "" }
+]

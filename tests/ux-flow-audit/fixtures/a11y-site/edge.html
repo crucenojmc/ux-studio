@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Edge cases that need a human</title>
+<style>
+  body { margin: 16px; font: 16px/1.5 sans-serif; color: #111; background: #fff; }
+  .row { margin: 12px 0; }
+  button { min-width: 44px; min-height: 32px; }
+  #ringed { border: 0; box-shadow: 0 0 0 1px #767676; background: #fff; padding: 6px; min-height: 28px; }
+  #bgfocus { outline: none; border: 0; background: #eeeeee; }
+  #bgfocus:focus-visible { background: #c7d2fe; }
+</style>
+</head>
+<body>
+  <p id="modern" class="row" style="color:oklch(0.7 0.1 200);background:#ffffff">Color moderno</p>
+  <div class="row"><button id="optional" type="button" tabindex="-1">Opcional</button></div>
+  <div class="row"><input id="ringed" type="text" aria-label="Con sombra"></div>
+  <fieldset disabled class="row"><p id="indisabled" style="margin:0;color:#aaaaaa;background:#ffffff">Deshabilitado</p></fieldset>
+  <div class="row"><button id="bgfocus" type="button">Solo fondo</button></div>
+</body>
+</html>

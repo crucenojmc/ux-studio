@@ -1,0 +1,141 @@
+{
+  "description": "Fictional seeded cases: each one is fixtures/clean.json with `set` paths applied, then `unset` paths removed. `expect` lists exactly the findings chart-check.mjs must report, as [rule, severity, path].",
+  "cases": [
+    {
+      "name": "bar-zero-off",
+      "set": { "encodings.y.zero": false },
+      "expect": [["bar-zero", "error", "encodings.y"]]
+    },
+    {
+      "name": "bar-zero-domain",
+      "set": { "encodings.y.domain": [100, 150] },
+      "expect": [["bar-zero", "error", "encodings.y"]]
+    },
+    {
+      "name": "pie-six-slices",
+      "set": {
+        "type": "pie",
+        "question": "composition",
+        "data.total": 782,
+        "encodings": {
+          "theta": { "field": "pedidos", "type": "quantitative", "unit": "pedidos" },
+          "color": { "field": "mes", "type": "nominal", "palette": ["#1f6feb", "#d97706", "#059669", "#9333ea", "#dc2626", "#0891b2"], "legend": true }
+        }
+      },
+      "expect": [["pie-slices", "error", "data.values"]]
+    },
+    {
+      "name": "donut-parts-exceed-whole",
+      "set": {
+        "type": "donut",
+        "question": "composition",
+        "data.total": 100,
+        "data.values": [
+          { "canal": "Mostrador", "share": 40 },
+          { "canal": "Teléfono", "share": 30 },
+          { "canal": "Web", "share": 20 },
+          { "canal": "Visita", "share": 13 }
+        ],
+        "encodings": {
+          "theta": { "field": "share", "type": "quantitative", "unit": "%" },
+          "color": { "field": "canal", "type": "nominal", "palette": ["#1f6feb", "#d97706", "#059669", "#9333ea"], "legend": true }
+        }
+      },
+      "expect": [["pie-sum", "error", "data.values"]]
+    },
+    {
+      "name": "donut-within-tolerance",
+      "set": {
+        "type": "donut",
+        "question": "composition",
+        "data.total": 100,
+        "data.values": [
+          { "canal": "Mostrador", "share": 40 },
+          { "canal": "Teléfono", "share": 30 },
+          { "canal": "Web", "share": 20 },
+          { "canal": "Visita", "share": 10.4 }
+        ],
+        "encodings": {
+          "theta": { "field": "share", "type": "quantitative", "unit": "%" },
+          "color": { "field": "canal", "type": "nominal", "palette": ["#1f6feb", "#d97706", "#059669", "#9333ea"], "legend": true }
+        }
+      },
+      "expect": []
+    },
+    {
+      "name": "dual-axis-unjustified",
+      "set": { "encodings.y2": { "field": "importe", "type": "quantitative", "label": "Importe (miles)", "scale": "linear", "zero": true } },
+      "expect": [["dual-axis", "error", "encodings.y2"]]
+    },
+    {
+      "name": "dual-axis-justified",
+      "set": { "encodings.y2": { "field": "importe", "type": "quantitative", "label": "Importe (miles)", "scale": "linear", "zero": true, "justification": "La audiencia compara cantidad e importe del mismo mes; dos gráficos alineados se probaron y separaban los meses." } },
+      "expect": [["dual-axis", "warning", "encodings.y2"]]
+    },
+    {
+      "name": "log-unlabelled",
+      "set": { "type": "line", "question": "change-over-time", "encodings.y.scale": "log" },
+      "expect": [["log-label", "error", "encodings.y"]]
+    },
+    {
+      "name": "log-labelled",
+      "set": { "type": "line", "question": "change-over-time", "encodings.y.scale": "log", "encodings.y.label": "Pedidos cerrados (escala logarítmica)" },
+      "expect": []
+    },
+    {
+      "name": "sample-without-n",
+      "set": { "data.sample": true, "display.showN": false },
+      "expect": [["sample-n", "error", "display.showN"]]
+    },
+    {
+      "name": "estimate-without-uncertainty",
+      "set": { "data.estimate": true },
+      "expect": [["estimate-uncertainty", "error", "uncertainty"]]
+    },
+    {
+      "name": "estimate-with-interval",
+      "set": { "data.estimate": true, "uncertainty": { "kind": "interval", "level": 0.9, "shown": true } },
+      "expect": []
+    },
+    {
+      "name": "three-d",
+      "set": { "display.threeD": true },
+      "expect": [["no-3d", "error", "display.threeD"]]
+    },
+    {
+      "name": "palette-eight",
+      "set": { "encodings.color": { "field": "sucursal", "type": "nominal", "palette": ["#1f6feb", "#d97706", "#059669", "#9333ea", "#dc2626", "#0891b2", "#65a30d", "#db2777"], "legend": true } },
+      "expect": [["palette-size", "error", "encodings.color"]]
+    },
+    {
+      "name": "colour-alone",
+      "set": { "encodings.color": { "field": "sucursal", "type": "nominal", "palette": ["#1f6feb", "#d97706", "#059669"], "legend": false } },
+      "expect": [["color-only", "error", "encodings.color"]]
+    },
+    {
+      "name": "card-placeholder",
+      "set": { "card.why": "TBD" },
+      "expect": [["card-field", "error", "card.why"]]
+    },
+    {
+      "name": "card-template-slot",
+      "set": { "card.math.formula": "<fórmula>" },
+      "expect": [["card-field", "error", "card.math.formula"]]
+    },
+    {
+      "name": "demo-unlabelled",
+      "set": { "card.source.origin": "Archivo data/pedidos-mensuales.csv." },
+      "expect": [["demo-label", "error", "card.source.origin"]]
+    },
+    {
+      "name": "schema-missing-limitations",
+      "unset": ["card.limitations"],
+      "expect": [["schema", "error", "card.limitations"]]
+    },
+    {
+      "name": "schema-empty-period",
+      "set": { "card.source.period": "" },
+      "expect": [["schema", "error", "card.source.period"]]
+    }
+  ]
+}

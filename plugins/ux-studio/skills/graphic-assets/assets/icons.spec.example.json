@@ -1,0 +1,58 @@
+{
+  "name": "example-line-icons",
+  "description": "Starter spec: 24 px grid, 2 px live-area padding, 2 px round stroke. Copy it to tmp/<topic>/ and replace the icons.",
+  "grid": 24,
+  "padding": 2,
+  "stroke": { "width": 2, "linecap": "round", "linejoin": "round" },
+  "cornerRadius": 2,
+  "colorToken": "text-primary",
+  "prefix": "icon-",
+  "icons": [
+    {
+      "name": "check",
+      "title": "Done",
+      "keywords": ["confirm", "ok"],
+      "shapes": [{ "type": "polyline", "points": [[5, 12], [10, 17], [19, 7]] }]
+    },
+    {
+      "name": "close",
+      "title": "Close",
+      "shapes": [
+        { "type": "line", "x1": 6, "y1": 6, "x2": 18, "y2": 18 },
+        { "type": "line", "x1": 18, "y1": 6, "x2": 6, "y2": 18 }
+      ]
+    },
+    {
+      "name": "chevron-right",
+      "title": "Next",
+      "shapes": [{ "type": "polyline", "points": [[9, 6], [15, 12], [9, 18]] }]
+    },
+    {
+      "name": "calendar",
+      "title": "Date",
+      "shapes": [
+        { "type": "rect", "x": 3, "y": 5, "width": 18, "height": 16 },
+        { "type": "line", "x1": 3, "y1": 10, "x2": 21, "y2": 10 },
+        { "type": "line", "x1": 8, "y1": 3, "x2": 8, "y2": 7 },
+        { "type": "line", "x1": 16, "y1": 3, "x2": 16, "y2": 7 }
+      ]
+    },
+    {
+      "name": "user",
+      "title": "Profile",
+      "shapes": [
+        { "type": "circle", "cx": 12, "cy": 8, "r": 4 },
+        { "type": "path", "d": "M4 21a8 8 0 0 1 16 0" }
+      ]
+    },
+    {
+      "name": "info",
+      "title": "Information",
+      "shapes": [
+        { "type": "circle", "cx": 12, "cy": 12, "r": 9 },
+        { "type": "line", "x1": 12, "y1": 11, "x2": 12, "y2": 16 },
+        { "type": "circle", "cx": 12, "cy": 8, "r": 1, "fill": true }
+      ]
+    }
+  ]
+}

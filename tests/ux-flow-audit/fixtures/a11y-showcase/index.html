@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Showcase fixture</title></head>
+<body>
+  <main id="app"></main>
+  <script>
+    const LAYOUT = { platforms: ['web', 'phone'] };
+    const SCREENS = {
+      inicio: '<h1>Inicio</h1><p>Todo bien</p>',
+      detalle: '<h1>Detalle</h1><p id="faint" style="color:#aaaaaa;background:#ffffff">Texto tenue</p>',
+    };
+    window.SHOWCASE = {
+      version: '1',
+      screens: () => [{ id: 'inicio', title: 'Inicio' }, { id: 'detalle', title: 'Detalle', access: ['admin'] }],
+      roles: () => [{ id: 'admin' }, { id: 'viewer' }],
+      async open(to) { document.getElementById('app').innerHTML = SCREENS[to.screen]; },
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+{
+  "$comment": "Copy to the project as fidelity.config.json. Paths are relative to this file. Keys starting with $ are ignored. Field reference: references/method.md.",
+  "outDir": "runs/2026-01-15",
+  "frozenTime": "2026-01-15T10:00:00-03:00",
+  "$frozenTimeNote": "frozenTime only affects the implementation: the prototype has its own fixed demo clock. Mask a clock that still differs.",
+  "tokensCss": "tokens.css",
+  "$tokensCssNote": "Optional. With it, every element property that names a token (elements.*.tokens) also reports how far each side is from the token's declared value, per theme.",
+  "timezoneId": "America/Argentina/Buenos_Aires",
+  "locale": "es-AR",
+  "networkIdleTimeout": 5000,
+
+  "prototype": {
+    "$comment": "The prototype-showcase file or URL. capture-states adds ?capture=<viewport.capture> and #<hash>&theme=<theme>&motion=reduced.",
+    "url": "prototype/index.html",
+    "css": ""
+  },
+
+  "implementation": {
+    "url": "https://staging.example.com",
+    "auth": {
+      "$comment": "method: none | storageState (file you create with --save-auth; never commit it) | manual (Claude in Chrome or DevTools MCP with --print-snippet).",
+      "method": "storageState",
+      "storageState": ".auth/implementation.json",
+      "readySelector": "[data-testid=user-menu]",
+      "$readySelectorNote": "--save-auth saves the session by itself once this selector is visible (a selector that only exists when logged in); no terminal needed. timeoutSeconds (default 600) ends the wait.",
+      "timeoutSeconds": 600
+    },
+    "routes": [
+      { "url": "**/api/orders*", "fulfill": "fixtures/orders.json", "status": 200 }
+    ],
+    "$routesNote": "Optional request fixtures: answer matching requests with the prototype's demo data (JSON paths relative to this file).",
+    "themeSteps": {
+      "dark": [{ "evaluate": "document.documentElement.classList.add('dark')" }],
+      "light": [{ "evaluate": "document.documentElement.classList.remove('dark')" }]
+    },
+    "css": ".cdk-overlay-pane{opacity:1!important;transform:none!important}"
+  },
+
+  "viewports": [
+    { "id": "web", "width": 1440, "height": 900, "deviceScaleFactor": 1, "capture": "web" },
+    { "id": "phone", "width": 390, "height": 844, "deviceScaleFactor": 3, "capture": "phone", "isMobile": true, "scale": "css", "$isMobileNote": "isMobile with a local HTML file that has no viewport meta renders at 980 px." }
+  ],
+  "themes": ["light", "dark"],
+
+  "masks": {
+    "$comment": "Masked on every state; per-state masks add to these. The union of both sides is painted out before the pixel diff.",
+    "prototype": ["[data-demo-clock]"],
+    "implementation": [".app-clock", ".user-avatar"]
+  },
+
+  "states": [
+    {
+      "id": "orders-list",
+      "$comment": "One row of the showcase registry/flows: same screen, role and demo data on both sides.",
+      "prototype": { "hash": "screen=orders&role=manager", "$hashNote": "Parameters beyond screen / role / sheet stay in the hash and reach SHOWCASE.open." },
+      "implementation": { "path": "/orders?fixture=demo", "steps": [{ "waitFor": "[data-testid=orders-table] tr" }] },
+      "elements": ["pageTitle", "primaryButton", "tableHeader", "statusChip", "card"]
+    },
+    {
+      "id": "order-detail-sheet",
+      "prototype": { "hash": "screen=orders&role=manager&sheet=order-detail" },
+      "implementation": {
+        "path": "/orders?fixture=demo",
+        "steps": [
+          { "click": "[data-testid=orders-table] tr:first-child" },
+          { "waitFor": "[role=dialog]" }
+        ]
+      },
+      "masks": { "implementation": ["[role=dialog] time"] }
+    },
+    {
+      "id": "returns-form",
+      "pending": true,
+      "reason": "The screen is not built yet; reported as pending, not verified.",
+      "prototype": { "hash": "screen=returns&role=manager" }
+    },
+    {
+      "id": "checkout-confirm",
+      "prototype": { "open": { "screen": "checkout", "role": "customer" }, "steps": [{ "click": "[data-proto=confirm]" }] },
+      "implementation": { "path": "/checkout", "steps": [{ "click": "button[type=submit]" }, { "waitFor": ".confirmation" }] },
+      "fullPage": true,
+      "$fullPageNote": "fullPage does not capture inner scroll containers: use a scroll step or map an element instead."
+    }
+  ],
+
+  "elements": {
+    "$comment": "name -> { prototype selector, implementation selector, properties?, tokens?, level?, priority? }. Omitted properties use the default set.",
+    "pageTitle": {
+      "prototype": "[data-proto=page-title]",
+      "implementation": "h1",
+      "properties": ["color", "font-family", "font-size", "font-weight", "line-height", "letter-spacing", "font-feature-settings"],
+      "tokens": { "color": "--ink-hi", "font-size": "--text-2xl" }
+    },
+    "primaryButton": {
+      "prototype": "[data-proto=primary]",
+      "implementation": ".btn-primary",
+      "level": "component",
+      "properties": ["background-color", "color", "font-size", "font-weight", "padding-top", "padding-left", "border-top-left-radius", "height", "transition-duration", "transition-timing-function"],
+      "tokens": { "background-color": "--accent", "border-top-left-radius": "--radius-md" }
+    },
+    "tableHeader": {
+      "prototype": "[data-proto=table] thead th",
+      "implementation": "table thead th",
+      "properties": ["color", "background-color", "font-size", "font-weight", "padding-top", "padding-left", "border-top-color"]
+    },
+    "statusChip": {
+      "prototype": "[data-proto=chip]",
+      "implementation": ".status-chip"
+    },
+    "card": {
+      "prototype": "[data-proto=card]",
+      "implementation": ".summary-card",
+      "level": "component",
+      "properties": ["background-color", "border-top-color", "border-top-left-radius", "box-shadow", "padding-top", "padding-left", "width", "height"]
+    }
+  },
+
+  "tolerances": {
+    "deltaE": 2,
+    "alpha": 0.02,
+    "px": 1,
+    "fontSize": 0,
+    "fontWeight": 0,
+    "durationMs": 0,
+    "pixelRatio": 0.02,
+    "pixelThreshold": 0.1,
+    "maskPadding": 1
+  }
+}

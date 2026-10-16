@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>API-backed fixture</title>
+<style>
+  body { margin: 0; color: rgb(0, 0, 0); }
+  body[data-tone=ok] #out { color: rgb(0, 128, 0); }
+  body[data-tone=error] #out { color: rgb(200, 0, 0); }
+</style>
+</head>
+<body>
+  <p id="out">loading</p>
+  <script>
+    // The data comes from an endpoint the fixture server does not have: only a route fixture answers it.
+    fetch('/api/summary')
+      .then((r) => r.json().then((j) => ({ status: r.status, json: j })))
+      .then(({ json }) => { document.body.dataset.tone = json.tone; document.querySelector('#out').textContent = json.label; })
+      .catch(() => { document.body.dataset.tone = 'error'; });
+  </script>
+</body>
+</html>

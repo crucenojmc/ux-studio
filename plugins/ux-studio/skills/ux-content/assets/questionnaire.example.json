@@ -1,0 +1,46 @@
+{
+  "version": "1",
+  "project": "Taller demo",
+  "language": "es",
+  "stage": "prototype",
+  "generatedAt": "2026-10-15T12:00:00Z",
+  "sources": ["screens.json", "content-inventory.md"],
+  "questions": [
+    {
+      "id": "Q-01",
+      "topic": "data-meaning",
+      "priority": "high",
+      "round": 1,
+      "header": "Estado",
+      "question": "¿Qué significa para el negocio el estado «En espera» de una orden?",
+      "why": "El texto de la lista vacía y del filtro por estado depende de este significado y no figura en los documentos recibidos.",
+      "options": [
+        { "id": "falta-repuesto", "label": "Espera un repuesto (Recomendado)", "description": "La orden no avanza hasta que llega material.", "consequence": "El texto habla de repuestos pendientes." },
+        { "id": "falta-cliente", "label": "Espera al cliente", "description": "La orden depende de una respuesta externa.", "consequence": "El texto habla de una respuesta pendiente del cliente." },
+        { "id": "otro-motivo", "label": "Otro motivo", "description": "El equipo lo describe.", "consequence": "Se redacta con la definición que se entregue." }
+      ],
+      "unblocks": ["F-01"],
+      "updates": [{ "target": "design-decisions", "section": "Glosario" }],
+      "rerun": [],
+      "answer": { "status": "pending", "option": null, "text": null }
+    },
+    {
+      "id": "Q-02",
+      "topic": "scope",
+      "priority": "medium",
+      "round": 1,
+      "header": "Alcance",
+      "question": "¿Se redactan los textos de todos los estados o solo los de las pantallas frecuentes?",
+      "why": "El inventario muestra 18 estados sin texto; acotar el alcance reduce el trabajo de redacción y revisión.",
+      "options": [
+        { "id": "todos", "label": "Todos los estados (Recomendado)", "description": "Cobertura completa del inventario.", "consequence": "Se redactan los 18 textos pendientes." },
+        { "id": "frecuentes", "label": "Solo pantallas frecuentes", "description": "Se cubren las pantallas del uso diario.", "consequence": "Quedan estados sin texto y se registran como pendientes." }
+      ],
+      "unblocks": ["F-02"],
+      "defaultIfUnanswered": { "option": "todos", "note": "Se redactan todos y se marca el alcance como supuesto." },
+      "updates": [{ "target": "BRIEF.md", "section": "Alcance" }],
+      "rerun": [],
+      "answer": { "status": "pending", "option": null, "text": null }
+    }
+  ]
+}

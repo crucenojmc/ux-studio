@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>Pedido confirmado</title>
+<!--
+  ux-recipes starter: HTML email (recipe `html-email`).
+  Rules this file keeps (email clients are not browsers):
+  - Table layout, 600 px container, every layout table with role="presentation".
+  - All styles inline. The <style> block holds only media queries: mobile (max-width) and dark mode.
+  - No JavaScript, no external CSS, no CSS custom properties, no web fonts (system stack).
+  - Every <img> carries alt text. Replace the logo's data URI with an absolute https URL to a PNG
+    hosted by the sending platform: most clients block data URIs and SVG.
+  Tokens (email clients ignore custom properties, so the values are inlined; change them by search
+  and replace, and mirror each change in the dark-mode block):
+    surface-page   #f4f5f7  dark #0f1218     text-primary    #14171f  dark #eef0f4
+    surface-raised #ffffff  dark #181c25     text-secondary  #4a5161  dark #a9b0bf
+    border-subtle  #dde1e8  dark #2c3240     accent / on-accent #2457d6 / #ffffff (both themes)
+-->
+<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<style>
+  /* Media queries only. Everything else is inline. */
+  @media only screen and (max-width: 620px) {
+    .px { padding-left: 16px !important; padding-right: 16px !important; }
+    .stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+    .stack-gap { padding-top: 12px !important; }
+    .h1 { font-size: 24px !important; line-height: 30px !important; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .bg-page { background-color: #0f1218 !important; }
+    .bg-card { background-color: #181c25 !important; }
+    .tx-primary { color: #eef0f4 !important; }
+    .tx-secondary { color: #a9b0bf !important; }
+    .bd { border-color: #2c3240 !important; }
+  }
+</style>
+</head>
+<body class="bg-page" style="margin:0;padding:0;width:100%;background-color:#f4f5f7;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <!-- Preheader: the inbox preview line. Hidden in the message body. -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;opacity:0;color:#f4f5f7;">El pedido 12345 llega el jueves entre las 9 y las 12 h. Revisa el detalle y la dirección de entrega.&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>
+
+  <table role="presentation" class="bg-page" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#f4f5f7;">
+    <tr>
+      <td align="center" style="padding:24px 8px;">
+        <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" class="bg-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#ffffff;border-radius:12px;">
+          <!-- Header: logo mark and brand name -->
+          <tr>
+            <td class="px" style="padding:32px 40px 0 40px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-right:12px;vertical-align:middle;">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232457d6'/%3E%3Cpath d='M9 22V10l7 7 7-7v12' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E" width="32" height="32" alt="Marca" style="display:block;border:0;outline:none;text-decoration:none;width:32px;height:32px;">
+                  </td>
+                  <td class="tx-primary" style="vertical-align:middle;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:20px;font-weight:700;color:#14171f;">Nombre de la marca</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Title and body copy -->
+          <tr>
+            <td class="px" style="padding:28px 40px 0 40px;">
+              <h1 class="h1 tx-primary" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:28px;line-height:36px;font-weight:700;color:#14171f;">Tu pedido está confirmado</h1>
+              <p class="tx-secondary" style="margin:12px 0 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:24px;color:#4a5161;">Preparamos el envío y te avisaremos cuando salga del depósito. Puedes revisar el detalle o cambiar la dirección hasta el miércoles a las 18 h.</p>
+            </td>
+          </tr>
+
+          <!-- Key facts: two columns on desktop, stacked on mobile -->
+          <tr>
+            <td class="px" style="padding:24px 40px 0 40px;">
+              <table role="presentation" class="bd" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border:1px solid #dde1e8;border-radius:8px;">
+                <tr>
+                  <td class="stack" width="50%" style="width:50%;padding:16px;vertical-align:top;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    <p class="tx-secondary" style="margin:0;font-size:13px;line-height:18px;color:#4a5161;">Número de pedido</p>
+                    <p class="tx-primary" style="margin:4px 0 0 0;font-size:16px;line-height:22px;font-weight:700;color:#14171f;">12345</p>
+                  </td>
+                  <td class="stack stack-gap" width="50%" style="width:50%;padding:16px;vertical-align:top;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    <p class="tx-secondary" style="margin:0;font-size:13px;line-height:18px;color:#4a5161;">Entrega estimada</p>
+                    <p class="tx-primary" style="margin:4px 0 0 0;font-size:16px;line-height:22px;font-weight:700;color:#14171f;">Jueves, de 9 a 12 h</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Bulletproof button: VML for Outlook on Windows, a padded link everywhere else -->
+          <tr>
+            <td class="px" align="left" style="padding:28px 40px 8px 40px;">
+              <!--[if mso]>
+              <v:roundrect href="https://example.com/pedidos/12345" style="height:48px;v-text-anchor:middle;width:220px;" arcsize="17%" stroke="f" fillcolor="#2457d6">
+                <w:anchorlock/>
+                <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Ver el pedido</center>
+              </v:roundrect>
+              <![endif]-->
+              <!--[if !mso]><!-->
+              <a href="https://example.com/pedidos/12345" style="display:inline-block;width:220px;background-color:#2457d6;border-radius:8px;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;line-height:48px;text-align:center;text-decoration:none;-webkit-text-size-adjust:none;mso-hide:all;">Ver el pedido</a>
+              <!--<![endif]-->
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="px" style="padding:24px 40px 32px 40px;">
+              <p class="tx-secondary" style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#4a5161;">Recibes este correo porque hiciste un pedido en la tienda. <a href="https://example.com/preferencias" class="tx-secondary" style="color:#4a5161;text-decoration:underline;">Preferencias de correo</a></p>
+            </td>
+          </tr>
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

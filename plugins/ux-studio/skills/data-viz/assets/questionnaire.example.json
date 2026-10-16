@@ -1,0 +1,28 @@
+{
+  "version": "1",
+  "project": "Taller demo",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-10-15T12:00:00Z",
+  "sources": ["data/pedidos-mensuales.csv", "chart-check.md"],
+  "questions": [
+    {
+      "id": "Q-01",
+      "topic": "data-meaning",
+      "priority": "high",
+      "round": 1,
+      "header": "Cerrado",
+      "question": "¿Qué pedidos cuentan como «cerrados» en el archivo de pedidos?",
+      "why": "El gráfico cuenta los pedidos cerrados por mes y la columna de estado trae tres valores; el conteo cambia según cuáles se incluyan, y los documentos recibidos no lo definen.",
+      "options": [
+        { "id": "entregado", "label": "Solo «entregado» (Recomendado)", "description": "Se cuentan las 742 filas con estado «entregado»; es el valor más frecuente en los meses cerrados.", "consequence": "El gráfico muestra 742 pedidos y la ficha lo dice en Filtros." },
+        { "id": "entregado-facturado", "label": "«entregado» y «facturado»", "description": "Se suman las 40 filas con estado «facturado».", "consequence": "El gráfico muestra 782 pedidos y la ficha lo dice en Filtros." },
+        { "id": "otro-criterio", "label": "Otro criterio", "description": "El equipo describe qué estados cuentan.", "consequence": "El conteo y la ficha se rehacen con la definición que se entregue." }
+      ],
+      "unblocks": ["F-01"],
+      "updates": [{ "target": "chart-spec", "section": "card.source.filters" }],
+      "rerun": ["chart-check"],
+      "answer": { "status": "pending", "option": null, "text": null }
+    }
+  ]
+}

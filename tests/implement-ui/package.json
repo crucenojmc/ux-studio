@@ -1,0 +1,9 @@
+{
+  "name": "ux-studio-implement-ui-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the ux-studio implement-ui skill (stack-detect script, skill package) and the ui-developer agent.",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test --test-concurrency=1" },
+  "devDependencies": {}
+}

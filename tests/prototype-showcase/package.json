@@ -1,0 +1,12 @@
+{
+  "name": "prototype-showcase-tests",
+  "private": true,
+  "type": "module",
+  "description": "Smoke tests for the ux-studio prototype-showcase template, preview wrapper and capture API.",
+  "scripts": {
+    "test": "node --test --test-concurrency=1"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}

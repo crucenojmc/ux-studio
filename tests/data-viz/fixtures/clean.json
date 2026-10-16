@@ -1,0 +1,53 @@
+{
+  "version": "1",
+  "id": "pedidos-por-mes",
+  "title": "Pedidos cerrados por mes en el taller de demostración",
+  "subtitle": "Enero a junio de 2026 · n = 782 pedidos",
+  "question": "comparison",
+  "type": "column",
+  "data": {
+    "ref": "data/pedidos-mensuales.csv",
+    "demo": true,
+    "sample": false,
+    "estimate": false,
+    "values": [
+      { "mes": "2026-01", "pedidos": 118 },
+      { "mes": "2026-02", "pedidos": 124 },
+      { "mes": "2026-03", "pedidos": 141 },
+      { "mes": "2026-04", "pedidos": 129 },
+      { "mes": "2026-05", "pedidos": 133 },
+      { "mes": "2026-06", "pedidos": 137 }
+    ]
+  },
+  "encodings": {
+    "x": { "field": "mes", "type": "ordinal", "label": "Mes" },
+    "y": { "field": "pedidos", "type": "quantitative", "label": "Pedidos cerrados", "unit": "pedidos", "scale": "linear", "zero": true, "aggregate": "count" }
+  },
+  "display": { "threeD": false, "showN": true },
+  "card": {
+    "question": "¿En qué meses del primer semestre se cerraron más pedidos?",
+    "why": "Columnas sobre una escala común que empieza en cero: la posición y el largo permiten comparar seis meses con precisión.",
+    "alternatives": [
+      { "chart": "Línea", "reason": "Sugiere una evolución continua; con seis meses la pregunta es comparar meses, no seguir una tendencia." },
+      { "chart": "Torta", "reason": "Los meses no son partes de un todo que interese, y comparar ángulos es menos preciso que comparar posiciones." }
+    ],
+    "source": {
+      "origin": "Datos de demostración: archivo ficticio data/pedidos-mensuales.csv, sin relación con un sistema real.",
+      "extraction": "Conteo de filas con estado «cerrado», agrupadas por mes de cierre.",
+      "period": "Del 1 de enero al 30 de junio de 2026.",
+      "filters": "Solo pedidos cerrados; se excluyen los anulados.",
+      "cutoff": "2026-07-01",
+      "n": 782
+    },
+    "math": {
+      "formula": "pedidos(mes) = cantidad de pedidos con fecha de cierre dentro del mes",
+      "aggregation": "Conteo por mes calendario.",
+      "units": "Pedidos por mes.",
+      "transformations": "Ninguna.",
+      "uncertainty": "No aplica: es el conteo completo del período, no una muestra.",
+      "outliers": "No se excluye ningún valor.",
+      "assumptions": "La fecha de cierre registrada es la del día en que se cerró el pedido."
+    },
+    "limitations": "Muestra la cantidad de pedidos, no su importe. Los meses tienen distinta cantidad de días hábiles."
+  }
+}

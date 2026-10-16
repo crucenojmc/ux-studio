@@ -1,0 +1,52 @@
+{
+  "calendar": { "hoursPerDay": 8, "daysPerWeek": 5 },
+  "tasks": [
+    {
+      "id": "registrar-recepcion",
+      "role": "deposito",
+      "title": "Registrar recepción de mercadería",
+      "frequency": { "count": 12, "per": "day" },
+      "steps": [
+        { "op": "navigate", "label": "Recepciones" },
+        { "op": "select", "field": "estacion", "knownBySystem": true },
+        { "op": "type", "field": "remito", "chars": 10 },
+        { "op": "type", "field": "estacion", "chars": 4 },
+        { "op": "type", "field": "total", "chars": 6, "derivable": true, "focus": "tab" },
+        { "op": "confirm", "label": "¿Confirmar la recepción?" },
+        { "op": "wait", "seconds": 2 }
+      ]
+    },
+    {
+      "id": "consultar-stock",
+      "role": "deposito",
+      "title": "Consultar stock",
+      "frequency": { "count": 3, "per": "hour" },
+      "steps": [
+        { "op": "navigate", "label": "Stock" },
+        { "op": "select", "field": "estacion" },
+        { "op": "wait", "seconds": 1 }
+      ]
+    },
+    {
+      "id": "aprobar-ajuste",
+      "role": "supervisor",
+      "title": "Aprobar ajuste de inventario",
+      "frequency": null,
+      "steps": [
+        { "op": "select", "field": "estacion" },
+        { "op": "click", "label": "Aprobar" }
+      ]
+    },
+    {
+      "id": "registrar-recepcion",
+      "variant": "proposed",
+      "role": "deposito",
+      "title": "Registrar recepción de mercadería",
+      "frequency": { "count": 12, "per": "day" },
+      "steps": [
+        { "op": "navigate", "label": "Recepciones" },
+        { "op": "type", "field": "remito", "chars": 10 }
+      ]
+    }
+  ]
+}

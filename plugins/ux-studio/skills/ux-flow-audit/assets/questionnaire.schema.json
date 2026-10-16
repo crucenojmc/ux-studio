@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ux-studio:ux-flow-audit:questionnaire:1",
+  "title": "Cuestionario de decisiones (ux-studio)",
+  "description": "Closed questions that turn every gap or pending decision of a ux-studio phase (brief, design system, showcase, usefulness audit, fidelity, video) into an answerable choice. The recommended option is always first and ends with '(Recomendado)'; a multiSelect question may recommend several, all of them first. Rounds of up to 4 questions are asked by the main conversation; answers update the listed targets and re-run the listed checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "project", "language", "stage", "generatedAt", "questions"],
+  "properties": {
+    "version": { "const": "1" },
+    "project": { "type": "string", "minLength": 1 },
+    "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$", "description": "Language of the questions; follows the brief (es by default)." },
+    "stage": { "enum": ["brief", "prototype", "implementation"], "description": "What was audited." },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "sources": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Artifacts read: BRIEF.md, requirements, reports, logs." },
+    "questions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/question" } }
+  },
+  "$defs": {
+    "optionId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "description", "consequence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/optionId" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 60, "description": "1-5 words; becomes the AskUserQuestion option label." },
+        "description": { "type": "string", "minLength": 1, "description": "What the option means, in business language." },
+        "consequence": { "type": "string", "minLength": 1, "description": "What changes in the product, effort or risk if chosen. business-rule: what changes in the API, the web or the data, who is affected, cost and risk." },
+        "exclusive": { "type": "boolean", "description": "multiSelect only: the option cannot be combined with others (for example «Saltear»)." }
+      }
+    },
+    "optionIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/optionId" } },
+    "oneOrMoreOptionIds": { "anyOf": [{ "$ref": "#/$defs/optionId" }, { "$ref": "#/$defs/optionIds" }] },
+    "recommendedOption": {
+      "allOf": [
+        { "$ref": "#/$defs/option" },
+        { "type": "object", "properties": { "label": { "type": "string", "pattern": "\\(Recomendado\\)$" } } }
+      ]
+    },
+    "otherOption": {
+      "allOf": [
+        { "$ref": "#/$defs/option" },
+        { "type": "object", "properties": { "label": { "type": "string", "not": { "pattern": "\\(Recomendado\\)" } } } }
+      ]
+    },
+    "singleSelectOptions": {
+      "type": "array",
+      "description": "Exactly one recommended option, the first.",
+      "prefixItems": [{ "$ref": "#/$defs/recommendedOption" }],
+      "items": { "$ref": "#/$defs/otherOption" }
+    },
+    "multiSelectOptions": {
+      "type": "array",
+      "description": "One or more recommended options, all before the rest.",
+      "anyOf": [
+        { "type": "array", "prefixItems": [{ "$ref": "#/$defs/recommendedOption" }], "items": { "$ref": "#/$defs/otherOption" } },
+        { "type": "array", "prefixItems": [{ "$ref": "#/$defs/recommendedOption" }, { "$ref": "#/$defs/recommendedOption" }], "items": { "$ref": "#/$defs/otherOption" } },
+        { "type": "array", "prefixItems": [{ "$ref": "#/$defs/recommendedOption" }, { "$ref": "#/$defs/recommendedOption" }, { "$ref": "#/$defs/recommendedOption" }], "items": { "$ref": "#/$defs/otherOption" } },
+        { "type": "array", "items": { "$ref": "#/$defs/recommendedOption" } }
+      ]
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "topic", "priority", "header", "question", "why", "options", "unblocks", "updates", "rerun", "answer"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^Q-[0-9]{2,3}$" },
+        "topic": { "enum": ["frequency", "redundancy", "reachability", "space", "heuristic", "accessibility", "business-rule", "data-meaning", "scope"] },
+        "priority": { "enum": ["high", "medium", "low"], "description": "Order of the rounds: impact of the findings it unblocks." },
+        "round": { "type": "integer", "minimum": 1, "description": "Set when the question is scheduled into an ask round." },
+        "header": { "type": "string", "minLength": 1, "maxLength": 12, "description": "Short chip label for AskUserQuestion." },
+        "question": { "type": "string", "minLength": 10, "pattern": "\\?$", "description": "Plain business language, one decision, ends with '?'." },
+        "why": { "type": "string", "minLength": 10, "description": "Why it matters: the finding and its cost." },
+        "multiSelect": { "type": "boolean", "default": false, "description": "Several options can be chosen; options marked exclusive cannot be combined." },
+        "options": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/option" } },
+        "unblocks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^F-[0-9]{2,3}$" },
+          "description": "Finding ids that cannot be closed until this is answered."
+        },
+        "defaultIfUnanswered": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["option", "note"],
+          "description": "Required except for business-rule and data-meaning questions, which have no default.",
+          "properties": {
+            "option": { "$ref": "#/$defs/oneOrMoreOptionIds" },
+            "note": { "type": "string", "minLength": 1, "description": "How the default is applied and labelled as an assumption." }
+          }
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["target"],
+            "properties": {
+              "target": { "enum": ["BRIEF.md", "task-inventory", "design-decisions", "prototype", "report", "decisions-log", "fidelity-config", "design-system", "brand-audit", "storyboard", "chart-spec"] },
+              "section": { "type": "string", "minLength": 1 }
+            }
+          },
+          "description": "Where the answer is written; references/questionnaire.md lists the targets of each phase."
+        },
+        "rerun": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["task-inventory", "flow-cost", "nav-graph", "space-audit", "a11y-audit", "heuristics", "capture-states", "compare", "extract-styles", "tokens-check", "showcase-check", "capture-flows", "chart-check"] },
+          "description": "Checks to run again once answered; references/questionnaire.md lists the checks of each phase."
+        },
+        "answer": { "$ref": "#/$defs/answer" }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "required": ["multiSelect"], "properties": { "multiSelect": { "const": true } } },
+          "then": { "type": "object", "properties": { "options": { "$ref": "#/$defs/multiSelectOptions" } } },
+          "else": {
+            "type": "object",
+            "properties": {
+              "options": { "$ref": "#/$defs/singleSelectOptions" },
+              "defaultIfUnanswered": { "type": "object", "properties": { "option": { "$ref": "#/$defs/optionId" } } },
+              "answer": { "type": "object", "properties": { "option": { "not": { "type": "array" } } } }
+            }
+          }
+        },
+        {
+          "if": { "type": "object", "required": ["topic"], "properties": { "topic": { "enum": ["business-rule", "data-meaning"] } } },
+          "then": { "type": "object", "properties": { "answer": { "type": "object", "properties": { "status": { "not": { "const": "defaulted" } } } } } },
+          "else": { "type": "object", "required": ["defaultIfUnanswered"], "properties": { "defaultIfUnanswered": true } }
+        },
+        {
+          "if": { "type": "object", "required": ["topic"], "properties": { "topic": { "const": "business-rule" } } },
+          "then": { "type": "object", "properties": { "options": { "type": "array", "items": { "type": "object", "properties": { "consequence": { "type": "string", "minLength": 80 } } } } } }
+        }
+      ]
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "option", "text"],
+      "properties": {
+        "status": { "enum": ["pending", "answered", "defaulted"] },
+        "option": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/oneOrMoreOptionIds" }] },
+        "text": { "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }], "description": "Free text when the user chose 'Otro' or added detail." },
+        "by": { "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }] },
+        "at": { "anyOf": [{ "type": "null" }, { "type": "string", "format": "date-time" }] }
+      },
+      "allOf": [
+        {
+          "if": { "type": "object", "required": ["status"], "properties": { "status": { "const": "answered" } } },
+          "then": {
+            "anyOf": [
+              { "type": "object", "properties": { "option": { "not": { "type": "null" } } } },
+              { "type": "object", "properties": { "text": { "type": "string" } } }
+            ]
+          }
+        },
+        {
+          "if": { "type": "object", "required": ["status"], "properties": { "status": { "const": "defaulted" } } },
+          "then": { "type": "object", "properties": { "option": { "$ref": "#/$defs/oneOrMoreOptionIds" } } }
+        },
+        {
+          "if": { "type": "object", "required": ["status"], "properties": { "status": { "const": "pending" } } },
+          "then": { "type": "object", "properties": { "option": { "type": "null" }, "text": { "type": "null" } } }
+        }
+      ]
+    }
+  }
+}

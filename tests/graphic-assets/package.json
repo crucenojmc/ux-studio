@@ -1,0 +1,16 @@
+{
+  "name": "ux-studio-graphic-assets-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the ux-studio graphic-assets skill scripts (icon-set.mjs, export.mjs) and skill package.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0",
+    "pngjs": "^7.0.0"
+  }
+}

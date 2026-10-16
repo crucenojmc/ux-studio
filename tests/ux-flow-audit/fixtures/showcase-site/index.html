@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Showcase de prueba</title>
+<style>body{margin:0;font:16px sans-serif;display:flex}.presenter{width:200px}.app{padding:16px}</style>
+</head>
+<body>
+  <!-- Presenter chrome: lists every screen. It is NOT part of the app and must not create edges. -->
+  <nav class="presenter" aria-label="Pantallas del showcase">
+    <a href="#screen=inicio">Inicio</a>
+    <a href="#screen=pedidos">Pedidos</a>
+    <a href="#screen=detalle">Detalle</a>
+    <a href="#screen=stock">Stock</a>
+    <a href="#screen=config">Configuración</a>
+    <a href="#screen=huerfana">Conciliación</a>
+  </nav>
+  <div data-frame="web"><div class="app" id="app"></div></div>
+  <script>
+    const SCREENS = [
+      { id: 'inicio', title: 'Inicio', group: 'General', access: 'all', kind: 'screen', path: '/inicio', desc: 'Inicio' },
+      { id: 'pedidos', title: 'Pedidos', group: 'Operación', access: ['operador', 'admin'], kind: 'screen', path: '/pedidos', desc: 'Lista' },
+      { id: 'detalle', title: 'Detalle de pedido', group: 'Operación', access: ['operador', 'admin'], kind: 'screen', path: '/pedidos/:id', desc: 'Detalle' },
+      { id: 'stock', title: 'Stock', group: 'Operación', access: [], kind: 'screen', path: '/stock', desc: 'Stock' },
+      { id: 'config', title: 'Configuración', group: 'Administración', access: ['admin'], kind: 'screen', path: '/config', desc: 'Ajustes' },
+      { id: 'huerfana', title: 'Conciliación', group: 'Operación', access: 'all', kind: 'screen', path: '/conciliacion', desc: 'Sin enlaces' },
+    ];
+    const ROLES = [
+      { id: 'operador', label: 'Operador', home: 'inicio' },
+      { id: 'admin', label: 'Administración', home: 'inicio' },
+    ];
+    const FLOWS = [
+      { id: 'f-operador', role: 'operador', title: 'Revisar un pedido', lede: 'Demo', steps: [
+        { label: 'Inicio', to: { screen: 'inicio', role: 'operador' } },
+        { label: 'Pedidos', to: { screen: 'pedidos' } },
+        { label: 'Detalle', to: { screen: 'detalle' } },
+        { label: 'Conciliar', to: { screen: 'huerfana' } },
+      ] },
+    ];
+    const VIEWS = {
+      inicio: (role) => `<h1>Inicio</h1>
+        <a href="#screen=pedidos">Pedidos</a>
+        <button data-a="go:stock">Ver stock</button>
+        ${role === 'admin' ? '<button type="button">Configuración</button>' : ''}`,
+      pedidos: () => `<h1>Pedidos</h1><button data-a="go:detalle">Ver</button> <a href="#screen=inicio">Volver</a>`,
+      detalle: () => `<h1>Detalle de pedido</h1><p>Sin acciones.</p>`,
+      stock: () => `<h1>Stock</h1><a href="#screen=inicio">Inicio</a>`,
+      config: () => `<h1>Configuración</h1><a href="#screen=inicio">Inicio</a>`,
+      huerfana: () => `<h1>Conciliación</h1><a href="#screen=inicio">Inicio</a>`,
+    };
+    const state = { screen: 'inicio', role: 'operador' };
+    function render() {
+      document.getElementById('app').innerHTML = VIEWS[state.screen](state.role);
+    }
+    window.SHOWCASE = {
+      version: '1',
+      screens: () => SCREENS.map((s) => ({ ...s })),
+      roles: () => ROLES.map((r) => ({ ...r })),
+      flows: () => JSON.parse(JSON.stringify(FLOWS)),
+      open(to, opts) {
+        if (to.role) state.role = to.role;
+        if (to.screen) state.screen = to.screen;
+        render();
+        return Promise.resolve();
+      },
+      targetRect(sel) {
+        const el = document.querySelector(sel);
+        return el ? el.getBoundingClientRect().toJSON() : null;
+      },
+    };
+    render();
+  </script>
+</body></html>

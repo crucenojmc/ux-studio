@@ -1,0 +1,102 @@
+{
+  "version": "1",
+  "project": "{producto}",
+  "language": "es",
+  "stage": "brief",
+  "generatedAt": "2026-01-01T00:00:00Z",
+  "sources": [
+    "BRIEF.md"
+  ],
+  "questions": [
+    {
+      "id": "Q-15",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Origen",
+      "question": "¿Desde qué diseño implementamos?",
+      "why": "La implementación copia un diseño acordado; sin un origen, la interfaz se inventaría.",
+      "options": [
+        {
+          "id": "prototipo",
+          "label": "Prototipo publicado (Recomendado)",
+          "description": "El prototipo navegable del showcase, con sus pantallas y tokens.",
+          "consequence": "Después se puede medir la fidelidad contra el mismo prototipo."
+        },
+        {
+          "id": "sistema",
+          "label": "Sistema de diseño",
+          "description": "Se aplican los tokens y componentes a pantallas que ya existen.",
+          "consequence": "Cambia el aspecto sin rediseñar los flujos."
+        },
+        {
+          "id": "capturas",
+          "label": "Capturas o especificación",
+          "description": "Imágenes o una especificación escrita que aporta el equipo.",
+          "consequence": "Lo que las capturas no muestran, como estados y errores, queda como pregunta."
+        }
+      ],
+      "unblocks": [
+        "F-15"
+      ],
+      "defaultIfUnanswered": {
+        "option": "prototipo",
+        "note": "Se aplica la recomendación inferida del pedido y del repositorio y se rotula como supuesto en el plan."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    },
+    {
+      "id": "Q-16",
+      "topic": "scope",
+      "priority": "high",
+      "round": 3,
+      "header": "Cambios",
+      "question": "¿Cómo se entregan los cambios en el producto?",
+      "why": "Editar el repositorio del producto necesita el permiso explícito del usuario; sin él solo se propone un parche.",
+      "options": [
+        {
+          "id": "rama",
+          "label": "Rama nueva, sin push (Recomendado)",
+          "description": "Se edita el repositorio del producto en una rama nueva, con commits y sin push.",
+          "consequence": "Con esta respuesta ui-developer edita el producto; el push y el pull request quedan para el equipo."
+        },
+        {
+          "id": "parche",
+          "label": "Solo un parche para revisar",
+          "description": "No se edita el repositorio: el cambio se entrega como parche en la carpeta de salida.",
+          "consequence": "El equipo lo revisa y lo aplica; nada cambia en el producto hasta entonces."
+        }
+      ],
+      "unblocks": [
+        "F-16"
+      ],
+      "defaultIfUnanswered": {
+        "option": "parche",
+        "note": "Sin respuesta no hay permiso: se entrega un parche y no se edita el repositorio del producto."
+      },
+      "updates": [
+        {
+          "target": "BRIEF.md",
+          "section": "Plan de módulos"
+        }
+      ],
+      "rerun": [],
+      "answer": {
+        "status": "pending",
+        "option": null,
+        "text": null
+      }
+    }
+  ]
+}

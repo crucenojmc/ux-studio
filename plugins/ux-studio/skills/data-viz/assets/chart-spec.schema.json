@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ux-studio:data-viz:chart-spec:1",
+  "title": "Chart spec (ux-studio data-viz)",
+  "description": "One chart of statistical or mathematical data: the question it answers, its type and encodings, where its data comes from, and its «Ficha del gráfico» (card). chart-check.mjs validates it with a built-in validator and then applies the reading rules (references/chart-selection.md). Uses only the keywords that validator supports.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "id", "title", "question", "type", "data", "encodings", "card"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": "1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$", "description": "Unique within the page; the card and the chart share it." },
+    "title": { "$ref": "#/$defs/text", "description": "The chart title as shown: says what it shows, with the period." },
+    "subtitle": { "$ref": "#/$defs/text", "description": "Shown under the title: unit, period, n." },
+    "question": {
+      "enum": ["comparison", "ranking", "distribution", "composition", "relationship", "change-over-time", "deviation", "uncertainty", "flow"],
+      "description": "The kind of question, per references/chart-selection.md; the card states the exact question."
+    },
+    "type": {
+      "enum": ["column", "bar", "grouped-column", "grouped-bar", "stacked-column", "stacked-bar", "diverging-bar", "lollipop", "dot", "dumbbell", "slope", "histogram", "boxplot", "violin", "strip", "density", "ecdf", "line", "area", "stacked-area", "sparkline", "scatter", "bubble", "heatmap", "pie", "donut", "treemap", "waterfall", "bullet", "interval", "fan", "sankey", "alluvial", "table"],
+      "description": "Chart type; references/chart-selection.md says when each fits."
+    },
+    "data": { "$ref": "#/$defs/data" },
+    "encodings": { "$ref": "#/$defs/encodings" },
+    "uncertainty": { "$ref": "#/$defs/uncertainty" },
+    "display": { "$ref": "#/$defs/display" },
+    "card": { "$ref": "#/$defs/card" }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1 },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "demo", "sample", "estimate"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/text", "description": "Where the rows live: a file in the output dir, a query id or a URL." },
+        "demo": { "type": "boolean", "description": "Demonstration data; the card's origin must say so." },
+        "sample": { "type": "boolean", "description": "The rows are a sample of a larger population: n must be shown on the chart." },
+        "estimate": { "type": "boolean", "description": "The values are estimates (forecast, model output, survey): uncertainty must be shown." },
+        "total": { "type": "number", "description": "The whole that the parts of a pie or donut add up to." },
+        "values": { "type": "array", "items": { "type": "object" }, "description": "Inline rows; needed for the pie and donut checks." }
+      }
+    },
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "type"],
+      "properties": {
+        "field": { "$ref": "#/$defs/text" },
+        "type": { "enum": ["quantitative", "temporal", "ordinal", "nominal"] },
+        "label": { "$ref": "#/$defs/text", "description": "Axis or legend title, with the unit; a log scale says so here." },
+        "unit": { "$ref": "#/$defs/text" },
+        "scale": { "enum": ["linear", "log", "sqrt", "time", "band", "point"] },
+        "zero": { "type": "boolean", "description": "Whether the scale includes zero; bars and columns must." },
+        "domain": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+        "bin": { "type": "boolean", "description": "Binned quantitative axis (histogram bins); exempt from the zero rule." },
+        "aggregate": { "enum": ["none", "count", "sum", "mean", "median", "min", "max", "rate", "share"] },
+        "palette": { "type": "array", "items": { "$ref": "#/$defs/text" }, "minItems": 1 },
+        "legend": { "type": "boolean" },
+        "directLabels": { "type": "boolean", "description": "Categories are labelled on the marks themselves." },
+        "justification": { "$ref": "#/$defs/text", "description": "Why a secondary axis (y2) is needed." }
+      }
+    },
+    "encodings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": { "$ref": "#/$defs/channel" },
+        "y": { "$ref": "#/$defs/channel" },
+        "y2": { "$ref": "#/$defs/channel" },
+        "theta": { "$ref": "#/$defs/channel" },
+        "z": { "$ref": "#/$defs/channel" },
+        "color": { "$ref": "#/$defs/channel" },
+        "size": { "$ref": "#/$defs/channel" },
+        "label": { "$ref": "#/$defs/channel" },
+        "facet": { "$ref": "#/$defs/channel" }
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "shown"],
+      "properties": {
+        "kind": { "enum": ["interval", "band", "error-bars", "fan", "gradient", "distribution"] },
+        "level": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1, "description": "Coverage of the interval, e.g. 0.95." },
+        "shown": { "type": "boolean" },
+        "fields": { "type": "array", "items": { "$ref": "#/$defs/text" } }
+      }
+    },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "threeD": { "type": "boolean" },
+        "showN": { "type": "boolean", "description": "n is visible on the chart itself (subtitle or annotation)." }
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "«Ficha del gráfico», shown next to the chart (references/chart-card.md).",
+      "required": ["question", "why", "alternatives", "source", "math", "limitations"],
+      "properties": {
+        "question": { "$ref": "#/$defs/text", "description": "«Pregunta que responde»" },
+        "why": { "$ref": "#/$defs/text", "description": "«Por qué este gráfico»" },
+        "alternatives": {
+          "type": "array",
+          "minItems": 1,
+          "description": "«Alternativas descartadas y por qué»",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["chart", "reason"],
+            "properties": { "chart": { "$ref": "#/$defs/text" }, "reason": { "$ref": "#/$defs/text" } }
+          }
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "«Fuente de los datos»",
+          "required": ["origin", "extraction", "period", "filters", "cutoff", "n"],
+          "properties": {
+            "origin": { "$ref": "#/$defs/text", "description": "Origin system or file; demo data says so." },
+            "extraction": { "$ref": "#/$defs/text", "description": "Query or extraction." },
+            "period": { "$ref": "#/$defs/text" },
+            "filters": { "$ref": "#/$defs/text" },
+            "cutoff": { "$ref": "#/$defs/text", "description": "Cut-off date of the data." },
+            "n": { "type": "integer", "minimum": 0, "description": "Number of records or observations behind the chart." }
+          }
+        },
+        "math": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "«Matemática»",
+          "required": ["formula", "aggregation", "units", "transformations", "uncertainty", "outliers", "assumptions"],
+          "properties": {
+            "formula": { "$ref": "#/$defs/text", "description": "In plain notation." },
+            "aggregation": { "$ref": "#/$defs/text" },
+            "units": { "$ref": "#/$defs/text" },
+            "transformations": { "$ref": "#/$defs/text" },
+            "uncertainty": { "$ref": "#/$defs/text", "description": "Uncertainty or confidence interval, or why none applies." },
+            "outliers": { "$ref": "#/$defs/text", "description": "How outliers were handled." },
+            "assumptions": { "$ref": "#/$defs/text" }
+          }
+        },
+        "limitations": { "$ref": "#/$defs/text", "description": "«Limitaciones y cómo leerlo»" }
+      }
+    }
+  }
+}

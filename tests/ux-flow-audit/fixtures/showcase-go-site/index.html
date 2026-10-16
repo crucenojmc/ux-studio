@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Showcase con data-go</title></head>
+<body>
+  <nav class="presenter"><a href="#screen=detalle">Detalle</a><a href="#screen=ajustes">Ajustes</a></nav>
+  <div data-frame="web"><div class="app" id="app"></div></div>
+  <script>
+    const SCREENS = [
+      { id: 'inicio', title: 'Inicio', access: 'all', kind: 'tab', path: '/inicio' },
+      { id: 'lista', title: 'Lista', access: 'all', kind: 'tab', path: '/lista' },
+      { id: 'detalle', title: 'Detalle', access: 'all', kind: 'push', path: '/lista/:id' },
+      { id: 'ajustes', title: 'Ajustes', access: 'all', kind: 'root', path: '/ajustes' },
+    ];
+    const SHEETS = [{ id: 'cerrar', title: 'Cerrar' }];
+    const ROLES = [{ id: 'uno', label: 'Uno', home: 'inicio' }];
+    const FLOWS = [{ id: 'f', role: 'uno', title: 'Flujo', steps: [
+      { label: 'Inicio', to: { screen: 'inicio', role: 'uno' } },
+      { label: 'Lista', to: { screen: 'lista' } },
+      { label: 'Detalle', to: { screen: 'detalle' } },
+      { label: 'Cierra', to: { screen: 'detalle', sheet: 'cerrar' } },
+      { label: 'Ajustes', to: { screen: 'ajustes' } },
+    ] }];
+    const VIEWS = {
+      inicio: () => `<h1>Inicio</h1><button data-go="lista">Lista</button><button data-act="filter" data-arg="x">Filtrar</button>`,
+      lista: () => `<h1>Lista</h1><table><tr><td><button data-go="detalle" data-arg="OT-1">OT-1</button></td></tr></table>`,
+      detalle: () => `<h1>Detalle</h1><button data-act="sheet" data-arg="cerrar">Cerrar</button><button data-act="check" data-arg="2">Check</button>`,
+      ajustes: () => `<h1>Ajustes</h1><button data-go="inicio">Inicio</button>`,
+    };
+    const state = { screen: 'inicio' };
+    const render = () => { document.getElementById('app').innerHTML = VIEWS[state.screen](); };
+    window.SHOWCASE = {
+      version: '1',
+      screens: () => SCREENS.map((s) => ({ ...s })),
+      sheets: () => SHEETS.map((s) => ({ ...s })),
+      roles: () => ROLES.map((r) => ({ ...r })),
+      flows: () => JSON.parse(JSON.stringify(FLOWS)),
+      open(to) { if (to.screen) state.screen = to.screen; render(); return Promise.resolve(); },
+      targetRect() { return null; },
+    };
+    render();
+  </script>
+</body></html>

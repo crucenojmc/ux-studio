@@ -1,0 +1,26 @@
+name: depot_demo
+description: A fictional depot app used as a stack-detect fixture.
+publish_to: 'none' # never published
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.3 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.4.0 # http client
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+scripts:
+  lint: flutter analyze --fatal-infos
+  format: dart format --set-exit-if-changed lib test
+  build: flutter build apk
+
+flutter:
+  uses-material-design: true

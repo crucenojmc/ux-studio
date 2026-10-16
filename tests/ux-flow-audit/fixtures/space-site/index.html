@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Pedidos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.4 sans-serif; }
+  header { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: #223; color: #fff; padding: 20px; }
+  aside { position: fixed; top: 64px; left: 0; bottom: 0; width: 240px; background: #eee; padding: 16px; }
+  main { margin: 64px 0 0 240px; padding: 24px; }
+  .tall { height: 1100px; }
+  table { width: 800px; border-collapse: collapse; }
+  td, th { border: 1px solid #ccc; padding: 4px; }
+  @media (max-width: 600px) { aside { display: none; } main { margin-left: 0; } }
+</style></head>
+<body>
+  <header>Operaciones (demo)</header>
+  <aside>Menú</aside>
+  <main>
+    <h1>Pedidos</h1>
+    <p>Lista de pedidos del día con datos de demostración.</p>
+    <div class="tall"></div>
+    <table>
+      <thead><tr><th>Pedido</th><th>Cliente</th><th>Notas</th></tr></thead>
+      <tbody>
+        <tr><td>P-001</td><td>Cliente A</td><td></td></tr>
+        <tr><td>P-002</td><td>Cliente B</td><td></td></tr>
+        <tr><td>P-003</td><td>Cliente C</td><td></td></tr>
+      </tbody>
+    </table>
+    <button id="crear">Crear pedido</button>
+  </main>
+</body></html>

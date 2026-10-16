@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piece</title>
+<!-- graphic-assets: piece-template.html. Replace with: source = <brief, envelope objective or spec this piece comes from> -->
+<!-- The design system's tokens.css, copied beside this file. Without it the neutral fallbacks below apply. -->
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /*
+   * The artboard is the viewport: export.mjs sets it to each format's size, so one file serves
+   * 1:1, 4:5, 1.91:1 and 16:9. Unit u = 1% of the short side, raised for wide formats that are
+   * displayed small. Margin (safe area) 7.4u, type scale 8.2u / 4.4u / 3u / 2.4u.
+   * Every element that carries the message sits inside [data-safe]; the test checks it stays
+   * inside the margin in every format. Colours come only from tokens (fallbacks are neutral).
+   */
+  :root { --u: 1vmin; }
+  @media (min-aspect-ratio: 3/2) { :root { --u: 1.25vmin; } }
+  @media (min-aspect-ratio: 9/5) { :root { --u: 1.5vmin; } }
+  :root {
+    --margin: calc(7.4 * var(--u));
+    --gap: calc(2.4 * var(--u));
+    --t-display: calc(8.2 * var(--u));
+    --t-sub: calc(4.4 * var(--u));
+    --t-body: calc(3 * var(--u));
+    --t-caption: calc(2.4 * var(--u));
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+  body {
+    background: var(--surface-page, #f6f6f7);
+    color: var(--text-primary, #1b1d22);
+    font-family: var(--font-sans, system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+  .artboard {
+    width: 100vw; height: 100vh; padding: var(--margin);
+    display: grid; gap: var(--gap);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand brand brand brand brand brand"
+      "copy  copy  copy  copy  copy  copy"
+      "cta   cta   cta   art   art   art";
+  }
+  /* Portrait 4:5: the spot illustration gets its own row above the footer. */
+  @media (max-aspect-ratio: 9/10) {
+    .artboard {
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        "brand brand brand brand brand brand"
+        "copy  copy  copy  copy  copy  copy"
+        "art   art   art   art   art   art"
+        "cta   cta   cta   cta   cta   cta";
+    }
+  }
+  /* Wide formats: 12 columns, copy left, illustration right. */
+  @media (min-aspect-ratio: 3/2) {
+    .artboard {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        "brand brand brand brand brand brand brand art art art art art"
+        "copy  copy  copy  copy  copy  copy  copy  art art art art art"
+        "cta   cta   cta   cta   cta   cta   cta   art art art art art";
+    }
+  }
+  .brand { grid-area: brand; display: flex; align-items: center; gap: calc(1.2 * var(--u)); font-size: var(--t-caption); font-weight: 600; color: var(--text-secondary, #5a606b); }
+  .brand svg { width: calc(3.6 * var(--u)); height: calc(3.6 * var(--u)); color: var(--accent, #3b5bdb); flex: none; }
+  .copy { grid-area: copy; align-self: center; display: grid; gap: calc(1.6 * var(--u)); }
+  .eyebrow { margin: 0; font-size: var(--t-caption); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent, #3b5bdb); }
+  h1 { margin: 0; font-family: var(--font-display, var(--font-sans, system-ui, sans-serif)); font-size: var(--t-display); line-height: 1.05; font-weight: 700; letter-spacing: -.01em; max-width: 16ch; }
+  .lede { margin: 0; max-width: 36ch; font-size: var(--t-body); line-height: 1.3; color: var(--text-secondary, #5a606b); }
+  .cta { grid-area: cta; align-self: end; justify-self: start; display: inline-flex; align-items: center; padding: calc(1.2 * var(--u)) calc(2.4 * var(--u)); border-radius: var(--radius-pill, 999px); background: var(--accent, #3b5bdb); color: var(--on-accent, #ffffff); font-size: var(--t-body); font-weight: 600; }
+  .art { grid-area: art; align-self: stretch; justify-self: stretch; min-height: 0; display: grid; place-items: center end; }
+  .art svg { width: 100%; height: 100%; max-height: 100%; }
+  /* The spot illustration is geometric: primitives coloured with tokens, nothing else. */
+  .art .back { fill: var(--surface-sunken, #ececef); }
+  .art .card { fill: var(--surface-raised, #ffffff); stroke: var(--border-subtle, #e2e3e7); stroke-width: 2; }
+  .art .s1 { fill: var(--series-1, #3b5bdb); }
+  .art .s2 { fill: var(--series-2, #12b886); }
+  .art .s3 { fill: var(--series-3, #f59f00); }
+  .art .line { stroke: var(--border-strong, #9aa0aa); stroke-width: 4; stroke-linecap: round; fill: none; }
+</style>
+</head>
+<body>
+  <main class="artboard">
+    <!-- Neutral mark. A client logo goes here only when the client supplied and approved it. -->
+    <div class="brand" data-safe>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor"/></svg>
+      <span>Brand name</span>
+    </div>
+    <div class="copy" data-safe>
+      <p class="eyebrow">Category</p>
+      <h1>One clear message in a few words</h1>
+      <p class="lede">A supporting line that says what changes for the reader.</p>
+    </div>
+    <div class="cta" data-safe>Call to action</div>
+    <div class="art" data-safe>
+      <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+        <circle class="back" cx="250" cy="150" r="140"/>
+        <rect class="card" x="70" y="70" width="240" height="160" rx="16"/>
+        <rect class="s1" x="100" y="160" width="36" height="46" rx="4"/>
+        <rect class="s2" x="152" y="130" width="36" height="76" rx="4"/>
+        <rect class="s3" x="204" y="100" width="36" height="106" rx="4"/>
+        <polyline class="line" points="100,118 152,104 204,84 280,70"/>
+        <circle class="s1" cx="330" cy="230" r="34"/>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>

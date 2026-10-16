@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animación de interfaz</title>
+<!--
+  ux-recipes starter: animation (recipe `animation`).
+  A timeline of named steps played with the Web Animations API (no library, no network).
+  - Edit STEPS below: each step animates one element (target) with keyframes, a duration token
+    (fast | base | slow) and an easing token (out | in-out | sheet).
+  - Tokens: the :root block uses the ux-studio core token names. Paste the design system's tokens.css
+    values over it; --motion-duration-* read the design system's --duration-* when present.
+  - Reduced motion: the page shows the end state with a short opacity fade, and play() does the same.
+  - Video capture: window.ANIMATION = { steps, duration, play(), pause(), seek(t), speed, playing }.
+    seek(t) is synchronous and deterministic: capture tools call it once per frame.
+-->
+<style>
+  :root {
+    color-scheme: light;
+    --surface-page: #f5f6f8;
+    --surface-raised: #ffffff;
+    --surface-sunken: #eceef2;
+    --text-primary: #14171f;
+    --text-secondary: #4a5161;
+    --border-subtle: #dde1e8;
+    --accent: #2457d6;
+    --accent-hover: #1c46ad;
+    --on-accent: #ffffff;
+    --focus-ring: #2457d6;
+    --status-ok: #157a3c;
+    --status-ok-bg: #ddf3e4;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+    --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px; --radius-pill: 999px;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    /* Motion tokens. Durations fall back to the design system's --duration-* when defined. */
+    --motion-duration-fast: var(--duration-fast, 120ms);
+    --motion-duration-base: var(--duration-base, 200ms);
+    --motion-duration-slow: var(--duration-slow, 320ms);
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+    --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+    --ease-sheet: cubic-bezier(.32, .72, 0, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-page: #0f1218;
+      --surface-raised: #181c25;
+      --surface-sunken: #222733;
+      --text-primary: #eef0f4;
+      --text-secondary: #a9b0bf;
+      --border-subtle: #2c3240;
+      --accent: #7aa2ff;
+      --accent-hover: #9bb9ff;
+      --on-accent: #0b1020;
+      --focus-ring: #7aa2ff;
+      --status-ok: #5fd08a;
+      --status-ok-bg: #173323;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-page: #0f1218;
+    --surface-raised: #181c25;
+    --surface-sunken: #222733;
+    --text-primary: #eef0f4;
+    --text-secondary: #a9b0bf;
+    --border-subtle: #2c3240;
+    --accent: #7aa2ff;
+    --accent-hover: #9bb9ff;
+    --on-accent: #0b1020;
+    --focus-ring: #7aa2ff;
+    --status-ok: #5fd08a;
+    --status-ok-bg: #173323;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font: 16px/1.5 var(--font-sans);
+  }
+  main { max-width: 720px; margin: 0 auto; padding: var(--space-5) var(--space-4) var(--space-6); }
+  h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 var(--space-2); }
+  .lead { margin: 0 0 var(--space-5); color: var(--text-secondary); }
+
+  /* Stage: the piece of interface being animated. */
+  .stage {
+    display: grid; place-items: center;
+    min-height: 260px; padding: var(--space-5) var(--space-4);
+    background: var(--surface-sunken); border-radius: var(--radius-lg);
+  }
+  .card {
+    width: min(100%, 340px); padding: var(--space-5);
+    background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px rgb(0 0 0 / .08);
+  }
+  .card-head { display: flex; align-items: center; gap: var(--space-3); }
+  .icon {
+    display: grid; place-items: center; flex: none;
+    width: 40px; height: 40px; border-radius: var(--radius-pill);
+    background: var(--status-ok-bg); color: var(--status-ok);
+  }
+  .card h2 { font-size: 1.0625rem; margin: 0; }
+  .track { height: 6px; margin: var(--space-4) 0; border-radius: var(--radius-pill); background: var(--surface-sunken); overflow: hidden; }
+  .bar { height: 100%; background: var(--accent); transform-origin: left center; }
+  .message { margin: 0; color: var(--text-secondary); }
+
+  /* Controls */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0; }
+  button {
+    font: inherit; font-size: .9375rem; min-height: 40px; padding: 0 var(--space-4);
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    background: var(--surface-raised); color: var(--text-primary); cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); min-width: 120px; }
+  button.primary:hover { background: var(--accent-hover); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .speed { display: inline-flex; gap: var(--space-1); }
+  .speed button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .scrub { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--space-3); flex: 1 1 100%; }
+  .scrub input { width: 100%; accent-color: var(--accent); }
+  .time { font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: .875rem; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Timeline of named steps */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  .steps li {
+    display: flex; justify-content: space-between; gap: var(--space-3);
+    padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: .9375rem;
+  }
+  .steps li[aria-current="step"] { border-color: var(--accent); color: var(--text-primary); }
+  .steps .range { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* Reduced motion: no movement. The script shows the end state with a short fade; say so. */
+  .reduced-note { display: none; margin: 0 0 var(--space-3); color: var(--text-secondary); font-size: .875rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .reduced-note { display: block; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Animación de interfaz</h1>
+  <p class="lead">Confirmación de un pedido en cuatro pasos. Cambia los pasos, las duraciones y las curvas en el bloque de pasos.</p>
+
+  <section class="stage" aria-label="Escena animada">
+    <article class="card" id="card">
+      <div class="card-head">
+        <span class="icon" id="icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </span>
+        <h2>Pedido confirmado</h2>
+      </div>
+      <div class="track"><div class="bar" id="bar"></div></div>
+      <p class="message" id="message">El pedido llegará el jueves entre las 9 y las 12 h.</p>
+    </article>
+  </section>
+
+  <div class="controls">
+    <button type="button" class="primary" id="play">Reproducir</button>
+    <button type="button" id="replay">Repetir</button>
+    <div class="speed" role="group" aria-label="Velocidad">
+      <button type="button" data-speed="0.5" aria-pressed="false">0,5×</button>
+      <button type="button" data-speed="1" aria-pressed="true">1×</button>
+      <button type="button" data-speed="2" aria-pressed="false">2×</button>
+    </div>
+    <label class="scrub">
+      <span class="visually-hidden">Línea de tiempo</span>
+      <input type="range" id="scrubber" min="0" max="1000" step="1" value="0">
+      <output class="time" id="time" for="scrubber">0 ms</output>
+    </label>
+  </div>
+
+  <p class="reduced-note">Movimiento reducido activo: se muestra el estado final.</p>
+  <ol class="steps" id="steps" aria-label="Pasos de la animación"></ol>
+</main>
+
+<script>
+  // Steps play in order; `gap` (ms) waits after the previous step, a negative gap overlaps it.
+  const STEPS = [
+    { name: 'Entra la tarjeta', target: '#card', duration: 'slow', easing: 'out', gap: 0,
+      keyframes: [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }] },
+    { name: 'Aparece el ícono', target: '#icon', duration: 'base', easing: 'out', gap: -120,
+      keyframes: [{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1)' }] },
+    { name: 'Se completa la barra', target: '#bar', duration: 'slow', easing: 'in-out', gap: 40,
+      keyframes: [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }] },
+    { name: 'Se muestra el mensaje', target: '#message', duration: 'base', easing: 'out', gap: 0,
+      keyframes: [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }] },
+  ];
+
+  (() => {
+    const css = getComputedStyle(document.documentElement);
+    const token = (name) => css.getPropertyValue(name).trim();
+    const toMs = (v) => (v.endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000) || 0;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Resolve the timeline from the tokens.
+    let cursor = 0;
+    const steps = STEPS.map((s) => {
+      const start = Math.max(0, cursor + (s.gap || 0));
+      const duration = toMs(token(`--motion-duration-${s.duration}`));
+      cursor = Math.max(cursor, start + duration);
+      return { name: s.name, target: s.target, start, duration, easing: token(`--ease-${s.easing}`), keyframes: s.keyframes };
+    });
+    const total = cursor;
+
+    // One paused WAAPI animation per step, all sharing one clock (delay + endDelay = total).
+    const animations = steps.map((s) => {
+      const a = document.querySelector(s.target).animate(s.keyframes, {
+        duration: s.duration, delay: s.start, endDelay: total - s.start - s.duration, easing: s.easing, fill: 'both',
+      });
+      a.pause();
+      return a;
+    });
+
+    const stage = document.querySelector('.stage');
+    const playBtn = document.getElementById('play');
+    const scrubber = document.getElementById('scrubber');
+    const time = document.getElementById('time');
+    const list = document.getElementById('steps');
+    scrubber.max = String(Math.round(total));
+    list.innerHTML = steps.map((s) =>
+      `<li><span>${s.name}</span><span class="range">${Math.round(s.start)}–${Math.round(s.start + s.duration)} ms</span></li>`).join('');
+
+    let speed = 1;
+    let playing = false;
+    let frame = 0;
+
+    const now = () => Number(animations[0].currentTime) || 0;
+    function sync(t = now()) {
+      scrubber.value = String(Math.round(t));
+      time.textContent = `${Math.round(t)} / ${Math.round(total)} ms`;
+      [...list.children].forEach((li, i) => {
+        const s = steps[i];
+        if (t >= s.start && t <= s.start + s.duration) li.setAttribute('aria-current', 'step');
+        else li.removeAttribute('aria-current');
+      });
+      playBtn.textContent = playing ? 'Pausar' : 'Reproducir';
+    }
+    function loop() {
+      sync();
+      if (playing) frame = requestAnimationFrame(loop);
+    }
+    function seek(t) {
+      const clamped = Math.min(Math.max(Number(t) || 0, 0), total);
+      cancelAnimationFrame(frame);
+      playing = false;
+      animations.forEach((a) => { a.pause(); a.currentTime = clamped; });
+      sync(clamped);
+    }
+    function fadeIn() {
+      stage.animate([{ opacity: 0 }, { opacity: 1 }], { duration: toMs(token('--motion-duration-fast')), easing: 'linear' });
+    }
+    function play() {
+      if (reduce.matches) { seek(total); fadeIn(); return; }
+      if (now() >= total) seek(0);
+      playing = true;
+      animations.forEach((a) => { a.playbackRate = speed; a.play(); });
+      loop();
+    }
+    function pause() {
+      playing = false;
+      animations.forEach((a) => a.pause());
+      sync();
+    }
+    animations[0].onfinish = () => { playing = false; sync(total); };
+
+    playBtn.addEventListener('click', () => (playing ? pause() : play()));
+    document.getElementById('replay').addEventListener('click', () => { seek(0); play(); });
+    scrubber.addEventListener('input', () => seek(scrubber.value));
+    document.querySelectorAll('[data-speed]').forEach((btn) => btn.addEventListener('click', () => {
+      speed = Number(btn.dataset.speed);
+      animations.forEach((a) => a.updatePlaybackRate(speed));
+      document.querySelectorAll('[data-speed]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    }));
+
+    window.ANIMATION = {
+      steps: steps.map(({ name, target, start, duration, easing }) => ({ name, target, start, duration, easing })),
+      duration: total,
+      play, pause, seek,
+      get speed() { return speed; },
+      get playing() { return playing; },
+      get reducedMotion() { return reduce.matches; },
+    };
+
+    // Reduced motion shows the end state; otherwise play once on load.
+    if (reduce.matches) { seek(total); fadeIn(); } else { seek(0); play(); }
+  })();
+</script>
+</body>
+</html>

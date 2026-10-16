@@ -1,0 +1,17 @@
+{
+  "name": "ux-studio-data-viz-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the ux-studio data-viz skill: the chart spec schema, chart-check reading rules, the chart card, and its wiring into recipes, agents and the README.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "playwright-core": "1.63.0"
+  }
+}

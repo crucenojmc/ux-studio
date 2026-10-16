@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es" data-diagram="loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagrama de flujo</title>
+<!--
+  ux-recipes starter: diagram (recipe `diagram`).
+  - Write the diagram in Mermaid syntax inside <pre class="mermaid">: flowchart, sitemap (flowchart TD),
+    architecture (flowchart LR with subgraphs), sequenceDiagram. Keep accTitle and accDescr.
+  - Mermaid is loaded from jsDelivr at an exact version as an ES module. If it cannot load, the raw
+    diagram text stays visible with a status line, so the content is never lost.
+  - Theme: Mermaid's "base" theme reads the tokens below (ux-studio core names); it re-renders when
+    the colour scheme changes. Paste the design system's tokens.css values over the :root block.
+  - Page state for captures and checks: <html data-diagram="loading | ready | fallback">.
+-->
+<style>
+  :root {
+    color-scheme: light;
+    --surface-page: #f5f6f8;
+    --surface-raised: #ffffff;
+    --surface-sunken: #eceef2;
+    --text-primary: #14171f;
+    --text-secondary: #4a5161;
+    --border-subtle: #dde1e8;
+    --border-strong: #9aa3b2;
+    --accent: #2457d6;
+    --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+    --radius-md: 12px;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-page: #0f1218;
+      --surface-raised: #181c25;
+      --surface-sunken: #222733;
+      --text-primary: #eef0f4;
+      --text-secondary: #a9b0bf;
+      --border-subtle: #2c3240;
+      --border-strong: #5c6578;
+      --accent: #7aa2ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-page: #0f1218;
+    --surface-raised: #181c25;
+    --surface-sunken: #222733;
+    --text-primary: #eef0f4;
+    --text-secondary: #a9b0bf;
+    --border-subtle: #2c3240;
+    --border-strong: #5c6578;
+    --accent: #7aa2ff;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font: 16px/1.5 var(--font-sans);
+  }
+  main { max-width: 960px; margin: 0 auto; padding: var(--space-5) var(--space-4) var(--space-6); }
+  h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 var(--space-2); }
+  .lead { margin: 0 0 var(--space-5); color: var(--text-secondary); }
+  .diagram {
+    margin: 0; padding: var(--space-4);
+    background: var(--surface-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+    overflow-x: auto;
+  }
+  .diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+  pre.mermaid {
+    margin: 0; padding: var(--space-4); overflow-x: auto;
+    background: var(--surface-sunken); border-radius: var(--radius-md);
+    font: 14px/1.6 var(--font-mono); color: var(--text-primary); white-space: pre;
+  }
+  .status { margin: var(--space-3) 0 0; color: var(--text-secondary); font-size: .875rem; }
+  figcaption { margin-top: var(--space-3); color: var(--text-secondary); font-size: .875rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Flujo de aprobación de un pedido</h1>
+  <p class="lead">Desde que llega el pedido hasta que se avisa al cliente.</p>
+
+  <pre class="mermaid">
+flowchart TD
+  accTitle: Flujo de aprobación de un pedido
+  accDescr: El pedido llega, se revisa el stock; si falta se pide reposición y luego se prepara el envío y se avisa al cliente.
+  A([Llega el pedido]) --> B{¿Hay stock suficiente?}
+  B -->|Sí| C[Preparar el envío]
+  B -->|No| D[Pedir reposición al proveedor]
+  D --> E[Recibir la reposición]
+  E --> C
+  C --> F([Avisar al cliente])
+</pre>
+  <figure class="diagram" hidden>
+    <div class="diagram-svg"></div>
+    <figcaption>Los rombos son decisiones; los bordes redondeados marcan el inicio y el fin.</figcaption>
+  </figure>
+  <p class="status" role="status" hidden></p>
+</main>
+
+<script type="module">
+  const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.esm.min.mjs';
+  const root = document.documentElement;
+  const pres = [...document.querySelectorAll('pre.mermaid')];
+  const sources = pres.map((pre) => pre.textContent);
+  const status = document.querySelector('[role="status"]');
+  let mermaid;
+  let renders = 0;
+
+  // Mermaid's base theme, fed from the page tokens.
+  function themeFromTokens() {
+    const css = getComputedStyle(root);
+    const t = (name) => css.getPropertyValue(name).trim();
+    return {
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: 'base',
+      fontFamily: t('--font-sans'),
+      flowchart: { useMaxWidth: true, curve: 'basis' },
+      themeVariables: {
+        fontFamily: t('--font-sans'),
+        fontSize: '15px',
+        background: t('--surface-raised'),
+        primaryColor: t('--surface-raised'),
+        primaryTextColor: t('--text-primary'),
+        primaryBorderColor: t('--accent'),
+        secondaryColor: t('--surface-sunken'),
+        tertiaryColor: t('--surface-sunken'),
+        lineColor: t('--border-strong'),
+        textColor: t('--text-primary'),
+        edgeLabelBackground: t('--surface-raised'),
+        clusterBkg: t('--surface-sunken'),
+        clusterBorder: t('--border-subtle'),
+      },
+    };
+  }
+
+  async function render() {
+    mermaid.initialize(themeFromTokens());
+    for (const [i, pre] of pres.entries()) {
+      const figure = pre.nextElementSibling;
+      const { svg } = await mermaid.render(`diagram-${i}-${++renders}`, sources[i]);
+      figure.querySelector('.diagram-svg').innerHTML = svg;
+      figure.hidden = false;
+      pre.hidden = true;
+    }
+    root.dataset.diagram = 'ready';
+  }
+
+  try {
+    ({ default: mermaid } = await import(MERMAID_URL));
+    await render();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => render());
+  } catch (error) {
+    // Keep the raw diagram text visible and say why.
+    pres.forEach((pre) => { pre.hidden = false; });
+    status.textContent = mermaid
+      ? 'El diagrama tiene un error de sintaxis; se muestra su texto.'
+      : 'No se pudo cargar el dibujo del diagrama; se muestra su texto.';
+    status.hidden = false;
+    root.dataset.diagram = 'fallback';
+    console.warn(error);
+  }
+</script>
+</body>
+</html>

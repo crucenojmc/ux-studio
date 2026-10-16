@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clean page</title>
+<style>
+  body { margin: 16px; font: 16px/1.5 sans-serif; color: #111; background: #fff; }
+  .row { margin: 12px 0; }
+  input { border: 2px solid #767676; background: #fff; padding: 6px; min-height: 28px; }
+  button { min-width: 44px; min-height: 32px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #spinner { width: 40px; height: 40px; background: #1a56db; animation: spin 1s linear infinite; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+  <h1>Titulo</h1>
+  <h2>Seccion</h2>
+  <p class="row">Texto con <a href="#top">un enlace</a> dentro del parrafo.</p>
+  <div class="row"><label for="n">Nombre</label> <input id="n" type="text"></div>
+  <div class="row"><button type="button">Guardar</button> <button type="button" aria-label="Cerrar"><svg width="16" height="16" aria-hidden="true"><path d="M2 2l12 12" stroke="#111"/></svg></button></div>
+  <div class="row"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="Logo" width="40" height="40"></div>
+  <div class="row" id="spinner" role="img" aria-label="Cargando"></div>
+</body>
+</html>

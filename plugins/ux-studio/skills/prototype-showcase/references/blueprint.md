@@ -131,10 +131,10 @@ DECISIONS = [{ title, detail, status: 'open' | 'decided', date: 'YYYY-MM-DD', ow
 - [ ] Every registry screen and sheet is in the index; locks name a role that can see them.
 - [ ] With both platforms, both frames show the same screen; desktop layout in the web frame, phone layout in the phone frame.
 - [ ] Every flow step opens; every `target` resolves in every declared frame; in `tour` and `ux-system`, "Reproducir" plays and a click inside a frame pauses it.
-- [ ] Theme toggle changes the computed `--surface-page`; text contrast 4.5:1 or more in both themes.
+- [ ] Theme toggle changes the computed `--surface-page`; text contrast 4.5:1 or more in each theme the product ships.
 - [ ] No horizontal scroll at 390 px; touch targets 44 px or more; hover styles only under `(hover: hover)`.
 - [ ] Reduced motion (control and OS) removes cursor travel and transform motion.
-- [ ] Zero console errors at 1440 and 390 px, dark and light. Screenshots taken.
+- [ ] Zero console errors at 1440 and 390 px in each theme the product ships. Screenshots taken.
 - [ ] Demo data labelled as demo; numbers coherent across screens; no real client names.
 - [ ] Size well under 16 MB (the template is under 225 KB); no external images.
 

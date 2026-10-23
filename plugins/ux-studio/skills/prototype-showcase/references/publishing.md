@@ -40,6 +40,6 @@ node ${CLAUDE_SKILL_DIR}/assets/preview.mjs design/showcase/page.html tmp/showca
 
 ## Publish
 
-1. Final checks from the blueprint checklist (1440 and 390 px, both themes, zero console errors).
+1. Final checks from the blueprint checklist (1440 and 390 px, the themes the product ships, zero console errors).
 2. Publish with the `Artifact` tool: `file_path` = the showcase file, a one-word `icon` (for example `layout`), a one-sentence `description`.
 3. Give the user the URL. For a reference showcase that lives on claude.ai, read it with the `Artifact` tool (`action: "read"`), never with a web fetch.

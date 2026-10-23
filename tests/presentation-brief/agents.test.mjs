@@ -168,3 +168,21 @@ describe('every agent points to the shared Budget contract', () => {
     });
   }
 });
+
+describe('ux-designer builds one direction and verifies once', () => {
+  const rules = () => section(agent('ux-designer'), 'Hard rules');
+
+  test('builds one direction; alternatives only when the brief asks (no 2–3 directions to explore)', () => {
+    assert.match(rules(), /One direction; alternatives only when the brief asks/);
+    assert.doesNotMatch(agent('ux-designer'), /Explore 2–3 quick directions/);
+  });
+
+  test('verifies once at the end: every declared frame, only the declared themes, zero console errors', () => {
+    const r = rules();
+    assert.match(r, /Verify once, at the end:/);
+    assert.match(r, /every declared frame/);
+    assert.match(r, /only the themes the brief or product declares/);
+    assert.match(r, /zero console errors/);
+    assert.doesNotMatch(r, /both themes/);
+  });
+});

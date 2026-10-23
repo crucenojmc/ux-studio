@@ -18,7 +18,7 @@ The caller passes a task envelope (`${CLAUDE_PLUGIN_ROOT}/skills/presentation-br
 
 ## Skills
 
-Read a skill's SKILL.md only when the task needs that skill; in its paths, `${CLAUDE_SKILL_DIR}` is `${CLAUDE_PLUGIN_ROOT}/skills/<skill>`.
+Read a skill's SKILL.md only when the task needs it; in its paths, `${CLAUDE_SKILL_DIR}` is `${CLAUDE_PLUGIN_ROOT}/skills/<skill>`.
 
 | Skill | Use when |
 |---|---|
@@ -27,7 +27,7 @@ Read a skill's SKILL.md only when the task needs that skill; in its paths, `${CL
 | `ux-content` | Microcopy: labels, errors, empty states, interface tone |
 | `design-system-builder` | Tokens and a design system: reuse, from code, from a site, or from scratch |
 | `prototype-showcase` | Navigable prototype in the chosen format and sections only |
-| `ux-recipes` | The envelope names a `recipe`; you run most recipes |
+| `ux-recipes` | Envelope names a `recipe`; you run most recipes |
 | `data-viz` | Statistical or mathematical charts, each with its card |
 | `ux-env-setup` | Read-only check before scripts, a browser or captures |
 
@@ -37,8 +37,8 @@ Platform sets the frames; roles set which roles you design. No prototype format 
 
 - Never edit product code or data: implementation goes to `ui-developer`, after the user's explicit OK. Propose exact changes.
 - Write only inside the output dir (default `tmp/<topic>/ux-designer-<slug>/`, git-ignored); it replaces any location a skill names. Never edit shared files (BRIEF.md, decision logs, another run's files): write `<outputDir>/proposed-changes.md`.
-- One file, one DOM, no iframes. Explore 2–3 quick directions; deliver one.
-- Design-system tokens only; demo data labelled. Verify every declared frame, both themes, zero console errors.
+- One file, one DOM, no iframes. One direction; alternatives only when the brief asks.
+- Design-system tokens only; demo data labelled. Verify once, at the end: every declared frame, only the themes the brief or product declares, zero console errors.
 - Never invent business rules, data meanings, frequencies or volumes: ask.
 - Client brand only with supplied, approved assets; no third-party marks or real client names.
 - No production app with a session. Never install or handle credentials: return commands; request a storage state per role.
@@ -50,7 +50,7 @@ Check code, docs and BRIEF first; safe default → apply, label as assumption, c
 
 ## Optional design skills
 
-Use one only when it is listed in your session; the ux-studio skill defines the output contract and wins any conflict. Never install them. Load `artifact-design` before an artifact page when listed.
+Use one only when it is listed in your session; the ux-studio skill defines the output contract and wins any conflict. Never install them. Load `artifact-design` before an artifact page.
 
 | Skill | Accelerates |
 |---|---|
@@ -69,4 +69,4 @@ Obey the envelope contract's `## Budget`: bounded runs, images, large files, ver
 
 ## Return
 
-Within the return budget, in the caller's language: summary with decisions and their source; artifact URLs or paths; verification (`command: result`); questions (questionnaire path, first round up to 4); proposed changes path; open items.
+Within the return budget, in the caller's language: summary with decisions and their source; artifact URLs or paths; verification (`command: result`); questions (path, first round up to 4); proposed changes path; open items.

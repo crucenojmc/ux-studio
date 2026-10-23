@@ -39,12 +39,12 @@ Runs when the `BRIEF.md` module plan selects "Presentación del prototipo" or on
 2. Copy `${CLAUDE_SKILL_DIR}/assets/showcase-template.html` into the project.
 3. Set `LAYOUT` from the BRIEF (`mode`, `sections`, `platforms`, `roles`). Replace tokens, `ROLES`, `DATA`, the `screen()`/`sheet()` registry, `FLOWS`, the data of the chosen sections (`PRINCIPLES`, `DEFINITIONS`/`DECISIONS`, Sistema notes), hero and, in `ux-system`, the Anexo; keep shell, player and API (`blueprint.md` checklist).
 4. Give each flow step a `to` state, a `target` present in every declared frame and a `say` line.
-5. Preview with `node ${CLAUDE_SKILL_DIR}/assets/preview.mjs page.html tmp/showcase/preview.html`; check 1440 and 390 px, both themes, zero console errors, blueprint self-check.
+5. Preview with `node ${CLAUDE_SKILL_DIR}/assets/preview.mjs page.html tmp/showcase/preview.html`; check 1440 and 390 px, the themes the product ships (not always both), zero console errors, blueprint self-check. Run the check once, at the end.
 6. Publish per `publishing.md`; republishing the same path keeps the URL.
 
 ## Output Contract
 
-Report the artifact URL (or file path), the format, sections, platforms and roles used (with their BRIEF source), screen, sheet and flow counts, screenshot paths (1440 dark and light, 390), console status, what stayed unverified, and deviations from the reference or brief.
+Report the artifact URL (or file path), the format, sections, platforms and roles used (with their BRIEF source), screen, sheet and flow counts, screenshot paths (1440 per theme checked, 390), console status, what stayed unverified, and deviations from the reference or brief.
 
 ## References
 

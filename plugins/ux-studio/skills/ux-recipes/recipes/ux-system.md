@@ -50,7 +50,7 @@ A plain HTML artifact: the `prototype-showcase` template, published with the `Ar
 
 ## Checks
 
-- `node ${CLAUDE_PLUGIN_ROOT}/skills/prototype-showcase/assets/preview.mjs <outputDir>/page.html <outputDir>/preview.html`, then the page at 1440 and 390 px, light and dark: zero console errors.
+- `node ${CLAUDE_PLUGIN_ROOT}/skills/prototype-showcase/assets/preview.mjs <outputDir>/page.html <outputDir>/preview.html`, then the page at 1440 and 390 px, in the themes the brief or product declares, checked once at the end: zero console errors.
 - «Reproducir» plays every flow; a click inside a frame pauses it; every step's `target` resolves in every declared frame.
 - Only the chosen sections render; the demo data is labelled.
 - With tokens: `node ${CLAUDE_PLUGIN_ROOT}/skills/design-system-builder/assets/tokens-to-css.mjs <tokens.json> --check` exits 0.

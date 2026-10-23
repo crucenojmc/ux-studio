@@ -134,13 +134,13 @@ position, margin, gap, display, flex/grid), D details (everything else, motion i
    without a selector the command stops with exit 64. The wait ends after 600 s by default
    (`--timeout <seconds>` or `auth.timeoutSeconds`) and saves nothing when it times out.
 3. **Manual, user's own browser**: `auth.method: "manual"`. Capture the prototype with
-   `--side prototype`. For each implementation state × viewport × theme: put the user's tab in that
-   state (same viewport via `resize_window` or DevTools MCP `resize_page`), run the expression from
-   `--print-snippet <stateId>` (Claude in Chrome `javascript_tool`, or DevTools MCP `evaluate_script`
-   wrapped as `() => <expression>`), save the returned JSON as
-   `captures/implementation/<state>__<viewport>__<theme>.json`. With DevTools MCP also save
-   `take_screenshot` (`filePath`) as the `.png` of the same name. Without the PNG, `compare.mjs`
-   compares styles only and says so.
+   `--side prototype`. The only browser step is the `--print-snippet <stateId>` expression: for each
+   implementation state × viewport × theme the user puts their tab in that state, viewport and
+   theme, then you run the expression (Claude in Chrome `javascript_tool`, or DevTools MCP
+   `evaluate_script` wrapped as `() => <expression>`) and save the returned JSON as
+   `captures/implementation/<state>__<viewport>__<theme>.json`. No resize, screenshot or other
+   browser call: the snippet records the window size and pixel ratio, and `compare.mjs` warns when
+   they differ from the prototype's. Without a PNG, `compare.mjs` compares styles only and says so.
 
 Then `node compare.mjs --config fidelity.config.json`.
 

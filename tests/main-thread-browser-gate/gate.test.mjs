@@ -147,12 +147,20 @@ describe('the extras are opt-in: never auto-loaded by the plugin', () => {
     assert.ok(!path.relative(PLUGIN, EXTRAS).split(path.sep).some((part) => part === 'agents' || part === 'hooks'));
   });
 
-  test('carry no installation-specific text (machine, user, client or project names, local paths)', () => {
+  test('carry no installation-specific text: no absolute user paths, no scratch directories', () => {
     for (const file of FILES) {
       const text = readFileSync(path.join(EXTRAS, file), 'utf8');
-      assert.doesNotMatch(text, /\/home\/|\/Users\/|javier|wmcloud|raizen|\b885\b|\b2026-10-23\b/i, file);
+      assert.doesNotMatch(text, /\/home\/|\/Users\/|[A-Za-z]:\\Users\\|claude-1000/, file);
     }
     assert.doesNotMatch(readFileSync(HOOK, 'utf8'), /this installation/);
+  });
+
+  test('the hook header states its reasoning without a dated measurement', () => {
+    const source = readFileSync(HOOK, 'utf8');
+    const header = source.slice(0, source.indexOf('*/') + 2);
+    assert.match(header, /^#!\/usr\/bin\/env node\n\/\*/);
+    assert.match(header, /Why: the main thread's context is cumulative/);
+    assert.doesNotMatch(header, /\b\d{4}-\d{2}-\d{2}\b/);
   });
 });
 
@@ -169,8 +177,7 @@ describe('README.md', () => {
     assert.match(flat, /runs on the session model/);
     assert.match(flat, /re-sent (on )?each turn/);
     assert.match(flat, /discarded/);
-    assert.match(flat, /about 960 browser tool calls ran from the main thread in three weeks/);
-    assert.match(flat, /largest share of a period's token growth/);
+    assert.match(flat, /Evidence from one measured installation:/);
   });
 
   test('explains what each file does to save tokens', () => {

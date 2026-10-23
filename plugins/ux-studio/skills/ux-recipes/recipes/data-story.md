@@ -55,7 +55,7 @@ A dashboard: check at run time with the `Artifact` tool (`action: "list", scope:
 - `node ${CLAUDE_PLUGIN_ROOT}/skills/data-viz/assets/chart-check.mjs <outputDir>/*.spec.json --out <outputDir>` exits 0.
 - Every chart shows its «Ficha del gráfico» next to it, never only in the annex; demo data labelled on the chart and in the card.
 - Every number on the page traces to an input; `questionnaire.json`, when present, is valid against `${CLAUDE_PLUGIN_ROOT}/skills/ux-flow-audit/assets/questionnaire.schema.json`.
-- HTML: zero console errors, no horizontal scroll at 390 px, light and dark themes.
+- HTML: zero console errors and no horizontal scroll at 390 px, in the themes the brief or product declares, checked once at the end.
 - Copy in the envelope's language, no voseo.
 
 ## Return

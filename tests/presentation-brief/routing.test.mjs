@@ -285,6 +285,30 @@ describe('task-envelope.md (invocation contract)', () => {
   });
 });
 
+describe('task-envelope.md closes the handoff contract', () => {
+  const envelope = () => read(SKILL_DIR, 'references/task-envelope.md');
+  const ret = () => envelope().slice(envelope().search(/^## Return/m), envelope().search(/^## Example/m));
+
+  test('an optional handoff input: the path of a previous HANDOFF.md, in the block and in the field table', () => {
+    assert.match(envelope(), /^ {2}handoff: <path to a previous HANDOFF\.md>/m);
+    const row = envelope().split('\n').find((l) => l.startsWith('| `handoff` |')) ?? '';
+    assert.match(row, /\| no \|/);
+    assert.match(row, /HANDOFF\.md/);
+    assert.match(row, /On resume the caller passes/);
+  });
+
+  test('when handoff is given, the agent reads it first and does not redo the reads it records', () => {
+    const rules = envelope().slice(envelope().search(/^## Agent rules/m), envelope().search(/^## Budget/m));
+    assert.match(rules, /When `handoff` is given, read it first and do not redo the reads it records/);
+  });
+
+  test('the Return contract carries a status: done | partial | blocked', () => {
+    assert.match(ret(), /1\. `status`: `done \| partial \| blocked`/);
+    assert.match(ret(), /`partial` returns the `HANDOFF\.md` path/);
+    assert.match(ret(), /`blocked` says what is needed to go on/);
+  });
+});
+
 describe('task-envelope.md Budget (shared cost contract)', () => {
   const budget = () => {
     const text = read(SKILL_DIR, 'references/task-envelope.md');

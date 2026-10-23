@@ -35,7 +35,7 @@ metadata:
 3. `node ${CLAUDE_SKILL_DIR}/assets/icon-set.mjs --spec … --out <dir> --tokens <tokens.css>` (`--topic <topic>` instead of `--out` writes to `tmp/<topic>/graphics/`; `--size <px>` only when the consumer needs width/height).
 4. Review `preview.html` in every theme at 1× and 4× (render it with `export.mjs --size 1200x900`); iterate.
 5. Pieces: build from `${CLAUDE_SKILL_DIR}/assets/piece-template.html` following `pieces.md`.
-6. Export: `node ${CLAUDE_SKILL_DIR}/assets/export.mjs --input <file.svg|file.html> --out <dir> --preset <name>` or `--size <W>x<H> --dpr 1,2,3` (`--list-presets`, `--help`). Look at every PNG before returning it.
+6. Export: `node ${CLAUDE_SKILL_DIR}/assets/export.mjs --input <file.svg|file.html> --out <dir> --preset <name>` or `--size <W>x<H> --dpr 1,2,3` (`--list-presets`, `--help`). Look at every PNG before returning it, downscaled to at most 1000 px wide (Budget #2); a 1:1 crop only where a check flags a defect.
 
 ## Output Contract
 

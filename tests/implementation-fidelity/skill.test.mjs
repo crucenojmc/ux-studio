@@ -77,3 +77,28 @@ describe('the references follow the same rules', () => {
     assert.match(read('references/decisions.md'), /Fidelity is reached when the final all-states re-measurement/);
   });
 });
+
+describe('the manual browser path is the documented snippet and nothing else', () => {
+  const method = read('references/method.md').replace(/\s+/g, ' ');
+  const manual = method.slice(method.indexOf('3. **Manual, user\'s own browser**'), method.indexOf('Then `node compare.mjs'));
+
+  test('SKILL.md: the only browser step is the --print-snippet expression; resize and screenshots come from the scripts', () => {
+    const rule = lineStarting(skill, '- Measure with the skill');
+    assert.match(rule, /the only browser step is running the `--print-snippet` expression/);
+    assert.match(rule, /any resize or screenshot comes from the scripts, never from a manual browser call/);
+  });
+
+  test('method.md section 5.3 runs the snippet and saves its JSON, with no resize or screenshot call', () => {
+    assert.ok(manual.length > 200, 'found the manual path');
+    assert.match(manual, /The only browser step is the `--print-snippet <stateId>` expression/);
+    assert.match(manual, /`javascript_tool`/);
+    assert.match(manual, /`evaluate_script`/);
+    assert.doesNotMatch(method, /resize_window|resize_page|take_screenshot/);
+  });
+
+  test('method.md: the window size is recorded by the snippet and compared, not set by hand', () => {
+    assert.match(manual, /the user puts their tab in that state, viewport and theme/);
+    assert.match(manual, /records the window size and pixel ratio/);
+    assert.match(manual, /compares styles only and says so/);
+  });
+});

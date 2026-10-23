@@ -28,8 +28,9 @@ and return its path for the caller to publish.
    node ${CLAUDE_SKILL_DIR}/assets/export.mjs --input … --preset social-square --dpr 2   # sharper copy
    ```
 
-4. Look at every PNG at full size and at the size it will be shown (a feed shows a 1080 px image at
-   roughly a third of its width). Check the contrast (section 5). Fix and re-render.
+4. Look at every PNG downscaled to at most 1000 px wide (Budget #2) and at the size it will be shown
+   (a feed shows a 1080 px image at roughly a third of its width); a 1:1 crop only where a check
+   flags a defect. Check the contrast (section 5). Fix and re-render.
 5. Return the HTML path, the PNG paths and `manifest.json`.
 
 The template is one artboard that fills the viewport, so one file serves every format below. Layout,

@@ -14,7 +14,7 @@ Runs when the `BRIEF.md` module plan sets fidelity to "Ahora" or on a direct req
 ## Hard Rules
 
 - Numbers decide (ΔE2000, px, % pixels). Images and Claude vision only show where to look.
-- Measure with the skill's scripts (`capture-states.mjs`, `compare.mjs`), never by browsing and screenshotting by hand. When the app cannot be automated, the only browser use is running the `--print-snippet` expression (`references/method.md`).
+- Measure with the skill's scripts (`capture-states.mjs`, `compare.mjs`), never by browsing and screenshotting by hand. When the app cannot be automated, the only browser step is running the `--print-snippet` expression (`references/method.md`); any resize or screenshot comes from the scripts, never from a manual browser call.
 - Compare paired states only: same data, viewport, DPR, theme, frozen time, motion off, fonts loaded, one machine and browser for both sides.
 - Never ask for, type or store credentials: the user runs `--save-auth`, or measure in the user's browser.
 - Never edit product code or data; propose exact changes (token, property, value).

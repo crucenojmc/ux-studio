@@ -19,6 +19,7 @@ ux-task:
   outputDir: tmp/<topic>/<agent>-<slug>/
   returnBudget: <words>
   brief: <path to BRIEF.md>
+  handoff: <path to a previous HANDOFF.md>
   answers: { Q-NN: <option id or text>, ... }
   consent: pending | granted
 ```
@@ -36,6 +37,7 @@ ux-task:
 | `outputDir` | no | `tmp/<topic>/<agent>-<slug>/`, git-ignored (check with `git check-ignore`) |
 | `returnBudget` | no | 200 words |
 | `brief` | no | Work from the envelope alone |
+| `handoff` | no | Fresh start. On resume the caller passes the `HANDOFF.md` a `status: partial` run returned (see Budget) |
 | `answers` | no | Only on a re-invocation, with the answers to the agent's questionnaire |
 | `consent` | `ui-developer` only | `pending`: the agent returns its plan (exact files and branch) and stops. `granted` only after the user approved that plan; it covers the plan's files and branch, nothing else |
 
@@ -47,6 +49,7 @@ ux-task:
 4. Agents never call `AskUserQuestion`: they return closed questions, valid against `ux-flow-audit/assets/questionnaire.schema.json`, and the caller asks them.
 5. Parallel-safe: write only inside the output dir, which replaces any location a skill names (`tmp/ux-audit/`, `tmp/fidelity/`, `videos/`, `tmp/<topic>/`). Never edit a shared file (BRIEF.md, a decisions log, the `fidelity.config.json` or questionnaire of another run): write the change in `<outputDir>/proposed-changes.md` and return its path; the caller applies it.
 6. Product code and data: only `ui-developer` edits a product repository, and only with `consent: granted` for the plan it returned. Every other agent proposes exact changes.
+7. When `handoff` is given, read it first and do not redo the reads it records.
 
 ## Budget
 
@@ -62,12 +65,13 @@ Every agent obeys these; they cap cost without lowering the deliverable.
 
 Compact, within `returnBudget` words, in the caller's language (Spanish by default):
 
-1. Summary: what was done, and each decision with its source (envelope, BRIEF, default, user), the recipe included.
-2. Artifacts: claude.ai URLs, or paths inside the output dir (with the title when the caller must publish).
-3. Verification: `<command>: <result>`, one line each.
-4. Questions: the questionnaire path and its first round (up to 4): header, question, option labels, recommended first.
-5. Proposed changes: `<outputDir>/proposed-changes.md`, or none.
-6. Open items: pending, unverified, blocked.
+1. `status`: `done | partial | blocked`. `partial` returns the `HANDOFF.md` path (see Budget); `blocked` says what is needed to go on.
+2. Summary: what was done, and each decision with its source (envelope, BRIEF, default, user), the recipe included.
+3. Artifacts: claude.ai URLs, or paths inside the output dir (with the title when the caller must publish).
+4. Verification: `<command>: <result>`, one line each.
+5. Questions: the questionnaire path and its first round (up to 4): header, question, option labels, recommended first.
+6. Proposed changes: `<outputDir>/proposed-changes.md`, or none.
+7. Open items: pending, unverified, blocked.
 
 Never return file dumps, full reports or whole questionnaires: their paths are enough.
 

@@ -47,7 +47,7 @@ A plain HTML artifact: the `prototype-showcase` template, published with the `Ar
 
 ## Checks
 
-- `node ${CLAUDE_PLUGIN_ROOT}/skills/prototype-showcase/assets/preview.mjs <outputDir>/page.html <outputDir>/preview.html`, then the page at each declared width (1440 web, 390 phone), light and dark: zero console errors.
+- `node ${CLAUDE_PLUGIN_ROOT}/skills/prototype-showcase/assets/preview.mjs <outputDir>/page.html <outputDir>/preview.html`, then the page at each declared width (1440 web, 390 phone), in the themes the brief or product declares, checked once at the end: zero console errors.
 - Every `data-go` opens its screen; every flow step's `target` resolves in every declared frame.
 - No cover, no sections, no flow player; the demo data is labelled.
 

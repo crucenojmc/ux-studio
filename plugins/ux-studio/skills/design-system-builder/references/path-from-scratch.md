@@ -12,17 +12,21 @@ Use when the brand has no design system artifact, no code with real styles and n
 | Constraints (accessibility level, devices, dark mode, languages) | theme set, minimum sizes | assume both themes, WCAG AA |
 | Logo, brand colors, brand fonts (files or values) | they are inputs, never approximations | none → plain type for the mark, say so |
 
-## 2. Directions (2–3), then the user picks ONE
+## 2. Direction: one by default
 
-Write one local board, `<dir>/directions.html`, with 2–3 columns. Each column:
+Write one local board, `<dir>/directions.html`, with a single column: the direction the brand words
+and the brief point to. Write 2–3 columns, and let the user pick ONE, only when the brief asks to
+choose among options. Each column:
 a name and one sentence tied to the brand words; the palette as large swatches (page, raised,
 text, accent, two status colors) in light and dark; the type pairing as a real specimen (display
 line, heading, a body paragraph in the brief's language, a caption); one button, one input and one
-card rendered with that direction. Vary what actually differs — hue family and neutral
-temperature, serif vs sans display, square vs soft radii — not three tints of the same idea.
+card rendered with that direction. With several columns, vary what actually differs — hue family
+and neutral temperature, serif vs sans display, square vs soft radii — not three tints of the same
+idea.
 
-Give the path, summarize each direction in two lines, and ask which one to build. Build nothing
-else until the user picks. Mixing ("A's color with B's type") is a valid pick.
+One direction: give the path and its two-line summary, and go on to build it. Several: give the
+path, summarize each direction in two lines, and ask which one to build. Build nothing else until
+the user picks. Mixing ("A's color with B's type") is a valid pick.
 
 ## 3. Build the chosen direction
 
@@ -79,5 +83,5 @@ only `var(--token)` values, readable in both themes):
 
 Show the user the system locally: `tokens-to-css.mjs <tokens.json> --style-classes --out
 <dir>/tokens.css` (outside `project/`; never published), link it from each preview
-while viewing locally, and render each preview in both themes. Iterate on what they flag. Then
+while viewing locally, and render each preview in the themes the brief or product declares, checked once at the end. Iterate on what they flag. Then
 follow `design-system-artifact.md` (previews use the page's text-style classes, not `--text-*`).

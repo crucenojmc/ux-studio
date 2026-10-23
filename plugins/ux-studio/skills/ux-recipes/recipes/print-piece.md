@@ -59,7 +59,7 @@ Infer instead of asking:
 
 1. Check the envelope: objective, use and formats. A missing one → return the Questions above as `<outputDir>/questionnaire.json` and stop.
 2. Medium check (see Medium); the caller's envelope or BRIEF decides when both routes apply.
-3. `graphic-assets`: compose the piece (Design artboards, or a copy of its `piece-template.html` with the system's tokens) and render every format with its `export.mjs` (`--preset` for social sizes, `--size … --dpr 3.125` for print); look at every PNG before returning it.
+3. `graphic-assets`: compose the piece (Design artboards, or a copy of its `piece-template.html` with the system's tokens) and render every format with its `export.mjs` (`--preset` for social sizes, `--size … --dpr 3.125` for print); look at every PNG before returning it, downscaled to at most 1000 px wide (Budget #2); a 1:1 crop only where a check flags a defect.
 4. Add the print note to the return when any format is for print.
 5. Run Checks, publish or update the artifact, and return.
 

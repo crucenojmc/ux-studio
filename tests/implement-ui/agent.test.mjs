@@ -16,10 +16,10 @@ const field = (src, name) => src.match(new RegExp(`^${name}: (.+)$`, 'm'))?.[1];
 const EXTERNAL = new Set(['skills/presentation-brief/references/task-envelope.md']);
 
 describe('ui-developer agent', () => {
-  test('frontmatter: name, opus, high effort', () => {
+  test('frontmatter: name, sonnet, high effort', () => {
     assert.ok(front, 'frontmatter block');
     assert.equal(field(front, 'name'), 'ui-developer');
-    assert.equal(field(front, 'model'), 'opus');
+    assert.equal(field(front, 'model'), 'sonnet');
     assert.equal(field(front, 'effort'), 'high');
   });
 
@@ -58,6 +58,18 @@ describe('ui-developer agent', () => {
     assert.match(body, /files/i);
     assert.match(body, /branch/i);
     assert.match(body, /never assume consent/i);
+  });
+
+  test('the plan run writes PLAN.md; the implement run starts from it and re-reads only the files it will edit', () => {
+    const consent = body.slice(body.indexOf('## Consent'), body.indexOf('## Project conventions win'));
+    assert.match(consent, /write `PLAN\.md` in the output dir \(conventions read and what applies, stack, the plan, files to edit\)/);
+    assert.match(consent, /With `consent: granted` start from `PLAN\.md` and re-read only the files you will edit/);
+  });
+
+  test('conventions (CLAUDE.md, AGENTS.md, project skills) are read in the plan run only and recorded in PLAN.md', () => {
+    const conventions = body.slice(body.indexOf('## Project conventions win'), body.indexOf('## Hard rules'));
+    assert.match(conventions, /In the plan run, read the repo's `CLAUDE\.md` \/ `AGENTS\.md`/);
+    assert.match(conventions, /record in `PLAN\.md` what applies/);
   });
 
   test('project conventions win and commits carry no AI attribution', () => {

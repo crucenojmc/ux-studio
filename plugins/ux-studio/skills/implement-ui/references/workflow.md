@@ -14,14 +14,14 @@ Read only what the plan needs, in this order:
    only when the envelope gives its path.
 2. `stack-detect.mjs <repo>`: UI stack and version, styling mechanism, test runner, lint/format
    commands, package manager, `CLAUDE.md` / `AGENTS.md` and project skill names.
-3. The repo's `CLAUDE.md` / `AGENTS.md`: branch naming, base branch, commit format, TDD, checks that
+3. The repo's `CLAUDE.md` / `AGENTS.md` (plan run only): branch naming, base branch, commit format, TDD, checks that
    are already red, forbidden areas.
 4. Only the project skills that cover the files you will touch (`.claude/skills/<name>/SKILL.md`).
 5. The source of truth: the prototype screen (locate it in the showcase with `rg -n`; never read a
    showcase page whole), the design system or `tokens.css`, and the existing component nearest to
    what you build. Reuse beats new code.
 
-Then fill `assets/plan-template.md` in the output dir:
+Then copy `assets/plan-template.md` to `<output dir>/PLAN.md` and fill it:
 
 | Plan field | Content |
 |---|---|
@@ -52,6 +52,7 @@ caller asks the user and re-invokes with `consent: granted` and the plan path.
 
 ## 3. Implement
 
+- Start from `PLAN.md`: do not repeat the stack detection or the convention reads; re-read only the files you will edit.
 - Create the branch from the agreed base. Work only in the product repo path from the envelope.
 - Follow the project's patterns: the nearest existing component, its state management, its
   folder structure, its i18n mechanism. A new pattern is a question, not a choice.

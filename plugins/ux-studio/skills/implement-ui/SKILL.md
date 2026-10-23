@@ -31,9 +31,9 @@ metadata:
 ## Execution Steps
 
 1. Read the envelope; check the critical inputs (gate 1).
-2. `node ${CLAUDE_SKILL_DIR}/assets/stack-detect.mjs <repo>` (read-only; `--help` lists the fields). Then read the repo's `CLAUDE.md` / `AGENTS.md` and only the project skills relevant to the files you will touch.
-3. Plan per `${CLAUDE_SKILL_DIR}/references/workflow.md`: copy `${CLAUDE_SKILL_DIR}/assets/plan-template.md` into the output dir, fill it (files, branch, tokens, tests, commands), return it and stop.
-4. With `consent: granted`: create the branch per convention and implement following `${CLAUDE_SKILL_DIR}/references/checklist.md` and `${CLAUDE_SKILL_DIR}/references/token-mapping.md`.
+2. Plan run only: `node ${CLAUDE_SKILL_DIR}/assets/stack-detect.mjs <repo>` (read-only; `--help` lists the fields). Then read the repo's `CLAUDE.md` / `AGENTS.md` and only the project skills relevant to the files you will touch; record what applies in `PLAN.md`.
+3. Plan per `${CLAUDE_SKILL_DIR}/references/workflow.md`: copy `${CLAUDE_SKILL_DIR}/assets/plan-template.md` into the output dir as `PLAN.md`, fill it (stack, conventions that apply, files to edit, branch, tokens, tests, commands), return it and stop.
+4. With `consent: granted`: start from `PLAN.md` (do not repeat steps 2–3; re-read only the files you will edit), create the branch per convention and implement following `${CLAUDE_SKILL_DIR}/references/checklist.md` and `${CLAUDE_SKILL_DIR}/references/token-mapping.md`.
 5. Run the project's test, lint and format commands that step 2 found, never invented ones; record `<command>: <result>`.
 6. Commit per the project's convention, in work units.
 7. Fill `${CLAUDE_SKILL_DIR}/assets/implementation-note-template.md` in the output dir, including the fidelity handoff request.

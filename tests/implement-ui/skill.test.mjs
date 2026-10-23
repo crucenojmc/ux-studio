@@ -65,6 +65,15 @@ describe('implement-ui SKILL.md', () => {
     assert.match(body, /optional/i);
   });
 
+  test('the plan run writes PLAN.md; the implement run starts from it without repeating the reads', () => {
+    const step = (n) => body.split('\n').find((l) => l.startsWith(`${n}. `)) ?? '';
+    assert.match(step(2), /^2\. Plan run only:/);
+    assert.match(step(2), /record what applies in `PLAN\.md`/);
+    assert.match(step(3), /copy `\$\{CLAUDE_SKILL_DIR\}\/assets\/plan-template\.md` into the output dir as `PLAN\.md`/);
+    assert.match(step(4), /start from `PLAN\.md`/);
+    assert.match(step(4), /do not repeat steps 2–3; re-read only the files you will edit/);
+  });
+
   test('hands off to implementation-fidelity and asks through the questionnaire schema', () => {
     assert.match(body, /implementation-fidelity/);
     assert.match(body, /ux-flow-audit\/assets\/questionnaire\.schema\.json/);
@@ -85,6 +94,13 @@ describe('implement-ui references', () => {
     const at = steps.map((s) => order.findIndex((h) => h.includes(s)));
     for (const [i, s] of steps.entries()) assert.ok(at[i] >= 0, `missing step ${s}`);
     assert.deepEqual([...at].sort((a, b) => a - b), at, `order ${order.join(' | ')}`);
+  });
+
+  test('workflow.md: the plan is PLAN.md, the implement run starts from it', () => {
+    const md = read('references/workflow.md').replace(/\s+/g, ' ');
+    assert.match(md, /copy `assets\/plan-template\.md` to `<output dir>\/PLAN\.md`/);
+    assert.match(md, /Start from `PLAN\.md`: do not repeat the stack detection or the convention reads; re-read only the files you will edit/);
+    assert.match(md, /plan run only/i);
   });
 
   test('token-mapping.md maps tokens.css to Tailwind, SCSS and CSS custom properties', () => {
@@ -116,6 +132,10 @@ describe('implement-ui templates for the team', () => {
     assert.match(md, /consent: granted/);
     assert.match(md, /Rama/);
     assert.match(md, /Archivos/);
+  });
+
+  test('the plan template records which conventions apply', () => {
+    assert.match(read('assets/plan-template.md'), /Convenciones que aplican:/);
   });
 
   test('the implementation note carries the fidelity handoff request', () => {

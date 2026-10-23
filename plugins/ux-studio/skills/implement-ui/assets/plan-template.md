@@ -9,6 +9,7 @@ producto: ni rama, ni archivos, ni formateo.
 - Alcance del diseño: <plataforma (Web · Mobile · Web y mobile) y roles>
 - Stack detectado: <framework y versión, estilos, ejecutor de pruebas> (salida de `stack-detect.mjs`)
 - Convenciones leídas: <`CLAUDE.md`, `AGENTS.md`, skills del proyecto>
+- Convenciones que aplican: <rama, formato de commit, linters, ejecutor de pruebas y TDD que esta implementación debe seguir>
 
 ## Rama
 
@@ -62,3 +63,5 @@ Fallas que ya existen en la rama base: <nombre de la prueba o regla, o «ninguna
 Quien invoca obtiene la aprobación del usuario y vuelve a invocar con `consent: granted` y la ruta de
 este plan. El consentimiento cubre solo estos archivos y esta rama; cualquier archivo fuera del
 plan, dependencia, cambio de configuración o migración requiere un plan nuevo.
+
+La implementación parte de este archivo (`PLAN.md`) y solo vuelve a leer los archivos que va a editar.

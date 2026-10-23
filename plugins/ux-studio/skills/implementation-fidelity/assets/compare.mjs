@@ -2,6 +2,7 @@
 // Compare the captures written by capture-states.mjs and write the fidelity report.
 //
 //   node compare.mjs --config fidelity.config.json [--out <dir>] [--previous <old fidelity.json>]
+//                    [--only <stateId>[,<stateId>...]]
 //
 // Per state x viewport x theme:
 //   - computed-style diff of every mapped element: colours with CIEDE2000 (alpha composited over
@@ -12,6 +13,7 @@
 //     prototype | implementation | diff image.
 // Writes <outDir>/fidelity.json and <outDir>/fidelity.md (from report-template.md).
 // With --previous it adds the before/after delta: resolved, new, still open, not re-measured.
+// With --only it measures just those states (a fix round) and the report says it is partial.
 // Exit codes: 0 ok, 1 error, 2 missing dependency.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,6 +26,7 @@ import {
   isPending,
   loadConfig,
   parseArgs,
+  parseOnly,
   propertiesFor,
   requireDependencies,
   requireValue,
@@ -250,13 +253,13 @@ function vsToken(prop, tokenValue, sideValue, sideColor, tol) {
   return { delta: r.delta, unit: r.unit, pass: r.pass };
 }
 
-export function measure(config, deps) {
+export function measure(config, deps, only = null) {
   const tol = { ...DEFAULT_TOLERANCES, ...(config.tolerances || {}) };
   const outDir = config.__out;
   const pairs = [];
   const findings = [];
   const measurements = [];
-  const warnings = [];
+  const warnings = only ? [`Medición parcial: solo ${[...only].join(', ')}; los demás estados no se volvieron a medir.`] : [];
   const tokenCache = new Map();
   const tokensFor = (theme) => {
     if (!config.__tokensCss) return null;
@@ -267,7 +270,7 @@ export function measure(config, deps) {
   const pending = config.states.filter(isPending).map((s) => ({ state: s.id, reason: s.reason.trim() }));
 
   for (const state of config.states) {
-    if (isPending(state)) continue;
+    if (isPending(state) || (only && !only.has(state.id))) continue;
     for (const viewport of config.viewports) {
       for (const theme of config.themes) {
         const key = stateKey(state, viewport, theme);
@@ -401,6 +404,7 @@ export function measure(config, deps) {
     config: config.__path,
     tokensCss: config.__tokensCss ? config.__tokensCss.path : null,
     tolerances: tol,
+    only: only ? [...only] : null,
     summary: {
       score: measuredAll ? round((withinAll / measuredAll) * 100, 1) : null,
       measured: measuredAll,
@@ -568,13 +572,15 @@ function renderMarkdown(report, config, template) {
 /* ------------------------------------------------------------------ main */
 
 const USAGE = `Usage:
-  node compare.mjs --config <fidelity.config.json> [--out <dir>] [--previous <old fidelity.json>] [--debug]
+  node compare.mjs --config <fidelity.config.json> [--out <dir>] [--previous <old fidelity.json>]
+                   [--only <stateId>[,<stateId>...]] [--debug]
   node compare.mjs --help
 
 Options:
   --config <file>     the same fidelity.config.json used by capture-states.mjs
   --out <dir>         folder holding captures/ and receiving the report (default: outDir of the config)
   --previous <file>   an older fidelity.json: adds resolved / new / still open / not re-measured
+  --only <stateId>[,...]  measure only these states (a comma list or a repeated flag), as capture-states.mjs
   --debug             print the stack trace of errors
   -h, --help          this text
 
@@ -588,7 +594,7 @@ async function main() {
     process.stdout.write(USAGE);
     return;
   }
-  assertKnownOptions(args, ['config', 'out', 'previous', 'debug', 'help']);
+  assertKnownOptions(args, ['config', 'out', 'previous', 'only', 'debug', 'help']);
   requireValue(args, 'config', 'config file');
   const mods = await requireDependencies(['pixelmatch', 'pngjs']);
   const deps = {
@@ -596,7 +602,7 @@ async function main() {
     PNG: mods.pngjs.PNG || mods.pngjs.default?.PNG,
   };
   const config = loadConfig(args.config, args.out);
-  const report = measure(config, deps);
+  const report = measure(config, deps, parseOnly(args, config));
   if (args.previous && args.previous !== true) {
     const prevPath = path.resolve(args.previous);
     report.delta = deltaAgainst(JSON.parse(fs.readFileSync(prevPath, 'utf8')), report, path.relative(config.__out, prevPath));

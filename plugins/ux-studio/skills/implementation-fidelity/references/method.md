@@ -9,7 +9,7 @@
 | Design system | `tokens.css` (config `tokensCss`, see section 3) and the Design System artifact from `design-system-builder` | yes |
 | States to compare | Start from the showcase registry/flows: one state per screen × role × sheet the flows visit | yes |
 | Viewports | The BRIEF's platform ("Alcance del diseño"): `web` 1440 × 900, `phone` 390 × 844, or both; DPR as the real devices. The prototype side captures only the platforms its showcase declares | yes |
-| Themes | Every theme the prototype ships (`light`, `dark`) | yes |
+| Themes | Only the themes the product ships (`light`, `dark`) | yes |
 | Agreed threshold | For example: score ≥ 95 % per state, pixel diff ≤ 2 %, zero A findings | ask once |
 
 Write them into `fidelity.config.json` (copy `assets/fidelity.config.example.json`).
@@ -147,15 +147,21 @@ Then `node compare.mjs --config fidelity.config.json`.
 ## 6. Cycle
 
 1. Measure (capture + compare) → `fidelity.md`, `fidelity.json`.
-2. Triage with vision: look at every side-by-side image; add semantic findings (wrong chart type,
-   missing state, wrong copy) as human-readable rows under "Hallazgos". Vision never changes a
-   number.
+2. Triage with vision: look only at the side-by-side images of the states the comparison flagged
+   under the threshold, downscaled to at most 1000 px wide (JPEG); add semantic findings (wrong
+   chart type, missing state, wrong copy) as human-readable rows under "Hallazgos". Vision never
+   changes a number.
    A data chart is also triaged against its `data-viz` spec: same chart type, same scales, and its «Ficha del gráfico» still next to it.
 3. Classify each finding: defect, technical constraint or improvement (`references/decisions.md`).
 4. The implementer fixes defects. The agent proposes the exact change: token, property, value.
-5. Re-measure into a new `outDir` and run `compare.mjs --previous <old>/fidelity.json`. The report
-   lists resolved, still open, new and not re-measured findings, and the score before and after.
-6. Repeat until the agreed threshold is met, or each remaining deviation has a logged decision.
+5. Re-measure only the failing states into a new `outDir`: `capture-states.mjs --only <stateId>`, then
+   `compare.mjs --only <stateId> --previous <old>/fidelity.json` (a comma list or a repeated `--only`
+   takes several). The report warns that it is partial and lists resolved, still open, new and not
+   re-measured findings, and the score before and after.
+6. Repeat until the failing states meet the agreed threshold, or each remaining deviation has a
+   logged decision.
+7. Final confirmation: one measurement of all states (no `--only`; `--previous` the last full
+   measurement), numerical; look at images only where it flags.
 
-Never write "faithful" or close the cycle without a re-measurement taken after the last fix.
+Never write "faithful" or close the cycle without the final all-states re-measurement taken after the last fix.
 Keep every measurement folder: the deltas are the audit trail.

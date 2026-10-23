@@ -14,29 +14,30 @@ Runs when the `BRIEF.md` module plan sets fidelity to "Ahora" or on a direct req
 ## Hard Rules
 
 - Numbers decide (ΔE2000, px, % pixels). Images and Claude vision only show where to look.
+- Measure with the skill's scripts (`capture-states.mjs`, `compare.mjs`), never by browsing and screenshotting by hand. When the app cannot be automated, the only browser use is running the `--print-snippet` expression (`references/method.md`).
 - Compare paired states only: same data, viewport, DPR, theme, frozen time, motion off, fonts loaded, one machine and browser for both sides.
 - Never ask for, type or store credentials: the user runs `--save-auth`, or measure in the user's browser.
 - Never edit product code or data; propose exact changes (token, property, value).
-- Never call it faithful without a re-measurement after the last fix.
+- Never call it faithful without a final re-measurement of all states after the last fix.
 - Behaviour-changing decisions belong to the product owner or user. Log every unfixed deviation; when one becomes the standard, update the design system (single source of truth).
 - No real client names, personal data or production credentials in outputs.
 - Measurement code, dependencies and captures never enter the product repository (no `package.json` changes, no committed scripts or images); only the final report and decisions log may be kept where the team stores documentation.
 
 ## Decision Gates
 
-- Choose capture path and tools with `references/tool-selection.md`.
+- The scripts in the steps below are the default path. Read `references/tool-selection.md` only when they do not cover the stack.
 - Closing threshold is a team decision: score ≥ 95 % per state, pixel diff ≤ 2 %, no A findings. Ask (one question, then STOP) only when `BRIEF.md` requires a different bar.
 - For each non-defect finding, present the options in `references/decisions.md` with cost and impact, then STOP for the owner.
 
 ## Execution Steps
 
-1. Create the measurement workspace (`tmp/fidelity/`, git-ignored). List states from the showcase registry/flows (they hold only the roles in scope); copy `assets/fidelity.config.example.json` there as `fidelity.config.json` (viewports from the BRIEF's platform: web 1440, phone 390, or both; every theme; element map with tokens). See `references/method.md`.
+1. Create the measurement workspace (`tmp/fidelity/`, git-ignored). List states from the showcase registry/flows (they hold only the roles in scope); copy `assets/fidelity.config.example.json` there as `fidelity.config.json` (viewports from the BRIEF's platform: web 1440, phone 390, or both; only the themes the product ships; element map with tokens). See `references/method.md`.
 2. If missing, propose one of two installs and run it after the user consents: inside that workspace (`npm init -y && npm i -D playwright-core pixelmatch pngjs`, per project) or once for every project (`npm i -g playwright-core pixelmatch pngjs`); the scripts find both. Never in a product's package.json. Use an existing Chromium; never download a browser unasked.
-3. `node ${CLAUDE_SKILL_DIR}/assets/capture-states.mjs --config fidelity.config.json` (`--save-auth --wait-for <selector>` for logins, `--print-snippet <state>` for the manual path; `--help` lists the options). Unbuilt screens are `pending: true` states with a reason; API data comes from `implementation.routes`.
+3. Capture only the themes the product ships: `node ${CLAUDE_SKILL_DIR}/assets/capture-states.mjs --config fidelity.config.json` (`--save-auth --wait-for <selector>` for logins, `--print-snippet <state>` for the manual path; `--help` lists the options). Unbuilt screens are `pending: true` states with a reason; API data comes from `implementation.routes`.
 4. `node ${CLAUDE_SKILL_DIR}/assets/compare.mjs --config fidelity.config.json`.
-5. Review each side-by-side image; add semantic findings; if pixels differ unexplained, extend the element map, repeat 3–4.
+5. Review side-by-side images only for the states `compare.mjs` flagged under the threshold, each downscaled to at most 1000 px wide (JPEG); add semantic findings; if pixels differ unexplained, extend the element map, repeat 3–4.
 6. Classify findings (defect, technical constraint, improvement); hand corrections A–D to the implementer.
-7. Re-measure into a new folder with `--previous <old>/fidelity.json` until the threshold is met or each remaining deviation has a logged decision.
+7. Fix rounds re-measure only the failing states into a new folder: `capture-states.mjs --only <stateId>`, then `compare.mjs --only <stateId> --previous <old>/fidelity.json` (a comma list or a repeated `--only` takes several). When they meet the threshold, or each remaining deviation has a logged decision, run one final measurement of all states (no `--only`; `--previous` the last full measurement), numerically; review images only where it flags. Only that run lets you call the implementation faithful.
 8. When a capture looks wrong, read `references/gotchas.md`.
 
 ## Output Contract

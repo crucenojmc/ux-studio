@@ -9,7 +9,7 @@
 //
 // Usage (run from a folder where playwright-core resolves: the workspace, a parent, NODE_PATH or a global install):
 //   node capture-states.mjs --config fidelity.config.json [--side prototype|implementation|both]
-//                           [--only <stateId>] [--out <dir>]
+//                           [--only <stateId>[,<stateId>...]] [--out <dir>]
 //   node capture-states.mjs --config fidelity.config.json --save-auth [--wait-for <css-selector>] [--timeout <seconds>]
 //        Opens a visible browser on the implementation; you log in yourself. With --wait-for (or
 //        implementation.auth.readySelector) the session is saved as soon as that selector is visible,
@@ -162,6 +162,8 @@ export class UsageError extends Error {
 
 /** Flags that never take a value, so the next token is not swallowed as one. */
 const BOOLEAN_FLAGS = new Set(['help', 'debug', 'save-auth', 'headless']);
+/** Flags that may repeat: their values accumulate in an array. */
+const REPEATABLE_FLAGS = new Set(['only']);
 
 export function parseArgs(argv) {
   const args = { _: [] };
@@ -179,11 +181,24 @@ export function parseArgs(argv) {
     const next = argv[i + 1];
     if (BOOLEAN_FLAGS.has(key) || next === undefined || next.startsWith('--')) args[key] = true;
     else {
-      args[key] = next;
+      args[key] = REPEATABLE_FLAGS.has(key) ? [...[args[key]].flat().filter((v) => typeof v === 'string'), next] : next;
       i++;
     }
   }
   return args;
+}
+
+/**
+ * The states `--only` selects: `--only a,b` and `--only a --only b` both give {a, b}; null without the flag.
+ * A bare `--only` or an id the config does not declare is a UsageError. Shared by capture and compare.
+ */
+export function parseOnly(args, config) {
+  if (args.only === undefined) return null;
+  const ids = [args.only].flat().flatMap((v) => (typeof v === 'string' ? v.split(',') : [])).map((v) => v.trim()).filter(Boolean);
+  if (!ids.length) throw new UsageError('missing state id (--only)');
+  const unknown = ids.filter((id) => !config.states.some((s) => s.id === id));
+  if (unknown.length) throw new UsageError(`unknown state in --only: ${[...new Set(unknown)].join(', ')}`);
+  return new Set(ids);
 }
 
 /** Throws a UsageError for any option the script does not know. */
@@ -731,7 +746,7 @@ async function saveAuth(chromium, config, args) {
 
 export const USAGE = `Usage:
   node capture-states.mjs --config <fidelity.config.json> [--side prototype|implementation|both]
-                          [--only <stateId>] [--out <dir>] [--debug]
+                          [--only <stateId>[,<stateId>...]] [--out <dir>] [--debug]
   node capture-states.mjs --config <file> --save-auth [--wait-for <css-selector>] [--timeout <seconds>]
   node capture-states.mjs --config <file> --print-snippet <stateId> [--side implementation]
   node capture-states.mjs --help
@@ -739,7 +754,7 @@ export const USAGE = `Usage:
 Options:
   --config <file>        fidelity.config.json (paths inside it are relative to the file)
   --side <side>          prototype, implementation or both (default both)
-  --only <stateId>       capture a single state
+  --only <stateId>[,...] capture only these states (a comma list or a repeated flag)
   --out <dir>            output folder (default: outDir of the config)
   --save-auth            open a visible browser, log in yourself, save the session to
                          implementation.auth.storageState
@@ -794,7 +809,8 @@ async function main() {
     process.exit(2);
   }
   const sides = !args.side || args.side === 'both' ? SIDES : [args.side];
-  const states = config.states.filter((s) => !args.only || s.id === args.only);
+  const only = parseOnly(args, config);
+  const states = config.states.filter((s) => !only || only.has(s.id));
   if (!states.length) throw new UsageError('no states to capture (check "states" and --only)');
 
   for (const state of states.filter(isPending)) console.log(`${'pending'.padEnd(14)} ${state.id} (${state.reason.trim()})`);

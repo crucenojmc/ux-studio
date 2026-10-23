@@ -53,5 +53,5 @@ finding IDs.
 
 ## 5. Closing
 
-Fidelity is reached when the latest re-measurement (taken after the last fix) meets the agreed
+Fidelity is reached when the final all-states re-measurement (taken after the last fix) meets the agreed
 threshold, and every remaining finding has a decision row. Say which of the two closed each finding.

@@ -186,3 +186,18 @@ describe('ux-designer builds one direction and verifies once', () => {
     assert.doesNotMatch(r, /both themes/);
   });
 });
+
+describe('ux-analyst measures fidelity with the scripts and re-measures only what failed', () => {
+  const rules = () => section(agent('ux-analyst'), 'Hard rules');
+
+  test('measures with the skill scripts, never by hand in a browser', () => {
+    assert.match(rules(), /Measure fidelity with the skill's scripts, never by hand in a browser\./);
+  });
+
+  test('fix rounds re-measure only the failing states; faithful needs a final numeric pass over all states', () => {
+    const r = rules();
+    assert.match(r, /Fix rounds re-measure only failing states \(`--only`\)\./);
+    assert.match(r, /Never call an implementation faithful without a final numeric re-measurement of all states after the last fix\./);
+    assert.match(r, /Device-only checks stay pending, never verified/);
+  });
+});

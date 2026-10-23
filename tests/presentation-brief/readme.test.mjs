@@ -95,6 +95,29 @@ describe('plugin README', () => {
   });
 });
 
+describe('release 0.5.0', () => {
+  const manifest = JSON.parse(readFileSync(path.join(REPO, 'plugins/ux-studio/.claude-plugin/plugin.json'), 'utf8'));
+
+  test('the plugin version changes, because users receive an update only when it does', () => {
+    assert.equal(manifest.version, '0.5.0');
+  });
+
+  test('the README tables list ui-developer on sonnet, as its frontmatter declares', () => {
+    const agent = readFileSync(path.join(REPO, 'plugins/ux-studio/agents/ui-developer.md'), 'utf8');
+    assert.match(agent, /^model: sonnet$/m);
+    const row = rows(section(readme, 'Agentes')).find((r) => r.startsWith('| `ui-developer`'));
+    assert.match(row, /\| sonnet \| high \|$/);
+    const calibration = section(readme, 'Calibración de modelos y esfuerzo').split('\n').find((l) => l.includes('`ui-developer`'));
+    assert.match(calibration, /\| sonnet \| high \|/);
+  });
+
+  test('«Contratos compartidos» has a Presupuesto row for the Budget section of the task envelope', () => {
+    const row = section(readme, 'Contratos compartidos').split('\n').find((l) => l.startsWith('| Presupuesto |'));
+    assert.ok(row, 'a Presupuesto row');
+    for (const part of [/## Budget/, /task-envelope\.md/, /HANDOFF\.md/, /1000 px/, /50 KB/, /una sola vez/]) assert.match(row, part);
+  });
+});
+
 describe('root README', () => {
   test('describes the plugin by the types of work it covers', () => {
     const intro = root.slice(0, root.search(/^## /m));

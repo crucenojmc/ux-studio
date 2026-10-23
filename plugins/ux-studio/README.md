@@ -88,7 +88,7 @@ El brief corre en la conversación principal porque es el único lugar con `AskU
 | `ux-designer` | Todo trabajo de diseño gráfico, UX y de sistemas de diseño: íconos, ilustraciones, textos, investigación, wireframes, sistemas de diseño, prototipos y gráficos de datos. Nunca edita código del producto | `graphic-assets`, `ux-research`, `ux-content`, `design-system-builder`, `prototype-showcase`, `data-viz`, `ux-recipes` (la mayoría de las recetas) | opus | high |
 | `ux-analyst` | Utilidad del producto, accesibilidad (variante «Accesibilidad» de `ux-flow-audit`) y fidelidad de la implementación | `ux-flow-audit`, `implementation-fidelity`, `data-viz` (gráficos de los informes), `ux-recipes` (receta `ux-audit`) | sonnet | medium |
 | `video-producer` | Videos narrados y subtitulados con HyperFrames | `prototype-to-video` | sonnet | high |
-| `ui-developer` | Implementación frontend: el único agente que edita el repositorio de un producto. Primero devuelve el plan (archivos y rama) y edita solo cuando el usuario lo aprueba | `implement-ui` | opus | high |
+| `ui-developer` | Implementación frontend: el único agente que edita el repositorio de un producto. Primero devuelve el plan (archivos y rama) y edita solo cuando el usuario lo aprueba | `implement-ui` | sonnet | high |
 
 Cada agente es corto (700 palabras como máximo) y carga sus skills a demanda: lee el `SKILL.md` de un skill solo cuando la tarea lo necesita, y las referencias, plantillas y scripts solo cuando un paso los pide.
 
@@ -101,7 +101,7 @@ Precios oficiales al 2026-10-06, por millón de tokens (entrada/salida): Opus 5.
 | `ux-env-setup` | Verificación mecánica | haiku | low | Definido en el frontmatter del skill; no requiere criterio de diseño. |
 | `presentation-brief` | Conversación con el usuario | Modelo de la sesión | el de la sesión | Debe correr en la conversación principal. |
 | Diseño gráfico, UX y prototipo (`ux-designer`) | Criterio visual y decisiones de arquitectura | opus | high | Es donde el error más cuesta. |
-| Implementación (`ui-developer`) | Código del producto | opus | high | Cambia código real; sigue las convenciones de cada proyecto. |
+| Implementación (`ui-developer`) | Código del producto | sonnet | high | Implementa un prototipo ya fijado y la medición de fidelidad lo verifica después; sigue las convenciones de cada proyecto. |
 | Auditoría y fidelidad (`ux-analyst`) | Mediciones con scripts e informes | sonnet | medium | Los números los dan los scripts. |
 | Videos (`video-producer`) | Orquestación con varias aprobaciones | sonnet | high | Muchas herramientas encadenadas. |
 
@@ -188,6 +188,7 @@ Lo habitual es que a los agentes los invoque otro agente principal, no el usuari
 - Si falta algo crítico, el agente devuelve enseguida un cuestionario de opciones cerradas, antes de leer a fondo. Los agentes nunca llaman a `AskUserQuestion`: quien los invoca pregunta y vuelve a invocar con las respuestas en `answers`.
 - Cada invocación escribe solo en su carpeta de salida (por defecto `tmp/<tema>/<agente>-<slug>/`, ignorada por git) y nunca edita archivos compartidos (`BRIEF.md`, logs de decisiones, el `fidelity.config.json` de otra corrida): devuelve `proposed-changes.md` y quien invoca lo aplica. Por eso se pueden invocar varios agentes en paralelo, cada uno con su objetivo, cuando ninguno necesita el resultado de otro.
 - La respuesta es compacta: resumen, rutas de los artefactos y preguntas, dentro del presupuesto de palabras.
+- Cada invocación hace una unidad de trabajo acotada: a las 80 llamadas aproximadas escribe `HANDOFF.md` en la carpeta de salida y devuelve `status: partial`; la invocación siguiente retoma desde ese archivo sin repetir las lecturas. `ui-developer` deja su plan en `PLAN.md` y la segunda invocación (con `consent: granted`) parte de él.
 
 Un ejemplo por agente (`subagent_type` en el comentario):
 
@@ -295,6 +296,7 @@ Mantenerlos permite que un prototipo propio siga siendo compatible con las audit
 | Contrato | Contenido |
 | --- | --- |
 | Sobre de tarea | `ux-task` con `objective`, `type`, `recipe` opcional, `skills`, `inputs`, `scope`, `language`, `constraints`, `outputDir`, `returnBudget` y `brief` opcional; respuesta compacta. Detalle en `skills/presentation-brief/references/task-envelope.md`. |
+| Presupuesto | Sección `## Budget` de `skills/presentation-brief/references/task-envelope.md`, que obedecen los cuatro agentes: corridas acotadas (a unas 80 llamadas se escribe `HANDOFF.md` y se devuelve `status: partial`), capturas reducidas a 1000 px de ancho como máximo y vistas solo si una medición las marcó, ningún archivo de más de 50 KB leído entero y la verificación completa una sola vez, al final. |
 | Tokens base | Colores (`surface-*`, `text-*`, `border-*`, `accent*`, `status-*`, `series-1..5`), `space-1..8`, `radius-*`, familias tipográficas y estilos de texto. Se valida con `tokens-to-css.mjs --check`. |
 | Formato y alcance del diseño | `LAYOUT = { mode: 'app' \| 'tour' \| 'ux-system', sections: [...], platforms: ['web'] \| ['phone'] \| ['web', 'phone'], roles: 'single' \| 'all' \| { focus: '<roleId>' }, webMinWidth }` en la plantilla, copiado del brief; `webMinWidth` sale del breakpoint de escritorio más ancho del producto. |
 | `window.SHOWCASE` | `{version: "1", screens(), roles(), flows(), open(to, opts), targetRect(selector, frame)}`. Captura determinista con `?capture=web\|phone`, solo para una plataforma declarada; otra reemplaza la página por el motivo. `roles()`, `screens()` y `flows()` devuelven solo lo que la página muestra. Igual en los tres formatos. |

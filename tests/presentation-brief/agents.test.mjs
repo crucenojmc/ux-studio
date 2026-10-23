@@ -154,3 +154,17 @@ describe('video-producer keeps its scope', () => {
     for (const gate of ['Storyboard', 'Voice', 'Draft', 'Spend or install']) assert.match(text, new RegExp(gate), gate);
   });
 });
+
+describe('every agent points to the shared Budget contract', () => {
+  for (const name of [...OWNED, 'ui-developer']) {
+    test(`${name} follows the envelope contract's Budget in one short line`, () => {
+      const lines = agent(name).split('\n').filter((l) => /`## Budget`/.test(l));
+      assert.equal(lines.length, 1, `${name}: exactly one pointer line`);
+      assert.match(lines[0], /bounded runs/i);
+      assert.match(lines[0], /images/i);
+      assert.match(lines[0], /large files/i);
+      assert.match(lines[0], /verify once/i);
+      assert.ok(words(lines[0]) <= 16, `${name}: pointer is ${words(lines[0])} words`);
+    });
+  }
+});

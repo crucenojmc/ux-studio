@@ -48,6 +48,16 @@ ux-task:
 5. Parallel-safe: write only inside the output dir, which replaces any location a skill names (`tmp/ux-audit/`, `tmp/fidelity/`, `videos/`, `tmp/<topic>/`). Never edit a shared file (BRIEF.md, a decisions log, the `fidelity.config.json` or questionnaire of another run): write the change in `<outputDir>/proposed-changes.md` and return its path; the caller applies it.
 6. Product code and data: only `ui-developer` edits a product repository, and only with `consent: granted` for the plan it returned. Every other agent proposes exact changes.
 
+## Budget
+
+Every agent obeys these; they cap cost without lowering the deliverable.
+
+1. Bounded runs: one invocation does one bounded unit of work. After about 80 tool calls, or after several build→check cycles, stop at a clean point: write `<outputDir>/HANDOFF.md` (done, remaining, decisions, files, open checks) and return `status: partial` with its path. A fresh invocation resumes from `HANDOFF.md` and does not redo the reads it records.
+2. Images: never Read a full-size screenshot. Downscale it first to at most 1000 px wide (JPEG), or capture it at that size. Prefer numeric checks (pixel diff, ΔE, DOM or computed styles, console errors); look only at the images a check flagged.
+3. Large files: never Read whole a file over 50 KB (published artifact pages, the showcase template, logs). Locate the spot with `rg -n` and read line ranges. Edit the local source; never read back a published artifact page to check an edit.
+4. Verify once: while iterating, check only what the last edit touched. Run the full verification pass once, at the end, on the final state.
+5. Questions: read `questionnaire.schema.json` only when there are questions to return.
+
 ## Return
 
 Compact, within `returnBudget` words, in the caller's language (Spanish by default):

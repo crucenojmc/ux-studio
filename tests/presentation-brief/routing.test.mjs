@@ -284,3 +284,56 @@ describe('task-envelope.md (invocation contract)', () => {
     for (const part of [/summary/i, /artifacts/i, /questions/i, /returnBudget/]) assert.match(ret, part);
   });
 });
+
+describe('task-envelope.md Budget (shared cost contract)', () => {
+  const budget = () => {
+    const text = read(SKILL_DIR, 'references/task-envelope.md');
+    const at = text.search(/^## Budget/m);
+    if (at < 0) return '';
+    const end = text.indexOf('\n## ', at + 1);
+    return text.slice(at, end < 0 ? undefined : end);
+  };
+
+  test('has a Budget section before the Return section', () => {
+    const text = read(SKILL_DIR, 'references/task-envelope.md');
+    assert.ok(budget(), 'has a "## Budget" section');
+    assert.ok(text.search(/^## Budget/m) < text.search(/^## Return/m), 'Budget comes before Return');
+  });
+
+  test('bounded runs: stop near 80 tool calls with a HANDOFF.md and status: partial; a fresh run resumes from it', () => {
+    const b = budget();
+    assert.match(b, /about 80 tool calls/);
+    assert.match(b, /build→check cycles/);
+    assert.match(b, /`HANDOFF\.md`/);
+    for (const part of ['done', 'remaining', 'decisions', 'files', 'open checks']) assert.ok(b.includes(part), part);
+    assert.match(b, /`status: partial`/);
+    assert.match(b, /resumes from `HANDOFF\.md`[^.]*does not redo the reads/i);
+  });
+
+  test('images: never Read a full-size screenshot; at most 1000 px wide JPEG; numeric checks first', () => {
+    const b = budget();
+    assert.match(b, /[Nn]ever Read a full-size screenshot/);
+    assert.match(b, /1000 px wide \(JPEG\)/);
+    assert.match(b, /pixel diff, ΔE, DOM or computed styles, console errors/);
+    assert.match(b, /only at the images a check flagged/i);
+  });
+
+  test('large files: never Read whole a file over 50 KB; rg -n and line ranges; never read a published page back', () => {
+    const b = budget();
+    assert.match(b, /[Nn]ever Read whole a file over 50 KB/);
+    assert.match(b, /`rg -n`/);
+    assert.match(b, /line ranges/);
+    assert.match(b, /Edit the local source/);
+    assert.match(b, /never read back a published artifact page/i);
+  });
+
+  test('verify once: iterate on what the last edit touched, run the full pass once on the final state', () => {
+    const b = budget();
+    assert.match(b, /only what the last edit touched/i);
+    assert.match(b, /full verification pass once, at the end, on the final state/i);
+  });
+
+  test('questions: the schema is read only when there are questions to return', () => {
+    assert.match(budget(), /`questionnaire\.schema\.json` only when there are questions to return/);
+  });
+});

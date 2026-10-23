@@ -80,6 +80,14 @@ describe('plugin README', () => {
     for (const s of OPTIONAL) assert.equal(rows(opt).filter((r) => r.startsWith(`| \`${s}\``)).length, 1, s);
   });
 
+  test('«Extras opcionales» links the opt-in main-thread browser gate and says it is never auto-loaded', () => {
+    const extras = section(readme, 'Extras opcionales');
+    assert.ok(extras, 'has the section');
+    assert.match(extras, /extras\/main-thread-browser-gate\/README\.md/);
+    assert.match(extras, /browser-qa/);
+    assert.match(extras, /nunca se cargan solos/);
+  });
+
   test('neutral Spanish: no voseo', () => {
     for (const text of [readme, root]) {
       assert.doesNotMatch(text, /\b(podés|tenés|querés|hacé|armá|pedí|decí|usá|elegí|mirá|fijate|sabés|probá|corré)\b/i);

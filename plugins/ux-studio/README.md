@@ -303,6 +303,14 @@ Mantenerlos permite que un prototipo propio siga siendo compatible con las audit
 
 Detalle en `skills/prototype-showcase/references/capture-contract.md` y `skills/design-system-builder/references/tokens-contract.md`.
 
+## Extras opcionales
+
+Archivos que nunca se cargan solos: viven en `extras/`, fuera de `agents/` y de `hooks/`, y cada usuario decide si los instala.
+
+| Extra | Qué hace | Documentación |
+| --- | --- | --- |
+| Compuerta de navegador del hilo principal | Un hook `PreToolUse` y el subagente `browser-qa` (sonnet) mantienen fuera del hilo principal las capturas y los volcados de las herramientas de navegador (Claude in Chrome, Chrome DevTools, Browser Use). El hilo principal acumula su contexto y lo reenvía en cada turno; un subagente lo descarta y devuelve solo un veredicto. Se instala a nivel de usuario. | [`extras/main-thread-browser-gate/README.md`](extras/main-thread-browser-gate/README.md) |
+
 ## Reglas que vienen de la experiencia
 
 - Una referencia es un ejemplo: el formato se elige en el brief. Cuando se pide replicarla, leer su código fuente y replicarla, sin descartar partes por cuenta propia.

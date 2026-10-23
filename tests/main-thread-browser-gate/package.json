@@ -1,0 +1,9 @@
+{
+  "name": "main-thread-browser-gate-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the opt-in extras in plugins/ux-studio/extras/main-thread-browser-gate (PreToolUse gate, browser-qa agent, settings snippet, README).",
+  "scripts": {
+    "test": "node --test"
+  }
+}
